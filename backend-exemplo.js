@@ -4,6 +4,7 @@
 
 // 1. Importar as bibliotecas
 // (Você precisaria instalar via 'npm install stripe express cors')
+const stripe = require('stripe')(// O CÓDIGO (CORRETO)
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // ⚠️ MODIFICADO: Usa a variável de ambiente segura
 const express = require('express');
 const cors = require('cors'); // NOVO: Adicionado para permitir chamadas do seu frontend
