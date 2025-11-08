@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>SynkCamp - Mini-cursos de Empreendedorismo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- NOVO: Tailwind Typography CDN (para formatar o texto do curso) -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- NOVO: Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        /* Aplicando a fonte Inter como padrão */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Classe para definir um tamanho mínimo para a UI principal, 
+           evitando que o footer suba em páginas curtas como a do curso */
+        .main-content {
+            min-height: 60vh;
+        }
+    </style>
+
+    <script>
+        // Configuração do Tailwind para adicionar as cores
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#F97316', // Laranja vibrante
+                        'brand-dark': '#111827',   // Um preto/cinza escuro
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-brand-dark">
+
+    <!-- Header / Navegação -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-3xl font-extrabold">
+                Synk<span class="text-brand-orange">Camp</span>
+            </a>
+
+            <!-- Links de Navegação (Desktop) -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#pilares" class="text-gray-600 hover:text-brand-orange font-medium">Categorias</a>
+                <a href="#cursos" class="text-gray-600 hover:text-brand-orange font-medium">Cursos</a>
+                <a href="#precos" class="text-gray-600 hover:text-brand-orange font-medium">Preços</a>
+                <a href="#" class="text-gray-600 hover:text-brand-orange font-medium">Sobre Nós</a>
+            </div>
+
+            <!-- Botões de Ação (Desktop) -->
+            <!-- NOVO: Wrapper Logged Out -->
+            <div id="logged-out-nav" class="hidden md:flex items-center space-x-4">
+                <a href="#" id="login-btn" class="font-medium text-gray-600 hover:text-brand-dark">Entrar</a>
+                <a href="#precos" id="signup-btn" class="bg-brand-orange text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-orange-600 transition duration-300">
+                    Assinar Agora
+                </a>
+            </div>
+            <!-- NOVO: Wrapper Logged In -->
+            <div id="logged-in-nav" class="hidden md:flex items-center space-x-4">
+                <span class="font-medium text-gray-700">Bem-vindo!</span>
+                <a href="#" id="logout-btn" class="bg-brand-dark text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-gray-800 transition duration-300">
+                    Sair
+                </a>
+            </div>
+
+            <!-- Botão de Menu (Mobile) -->
+            <div class="md:hidden">
+                <button class="text-brand-dark focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =================================== -->
+    <!--      CONTEÚDO DA PÁGINA PRINCIPAL    -->
+    <!-- =================================== -->
+    <main id="main-page-content" class="main-content">
+
+        <!-- Seção Hero -->
+        <section class="container mx-auto px-4 py-24 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
+                Aprenda Empreendedorismo na Prática.
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Mini-cursos direto ao ponto para você dominar marketing, finanças, renda extra e desenvolvimento pessoal. Tudo em um só lugar.
+            </p>
+            <a href="#precos" class="bg-brand-orange text-white px-10 py-4 rounded-lg font-bold text-lg shadow-lg hover:bg-orange-600 transition duration-300 transform hover:scale-105">
+                Comece seus 7 dias grátis
+            </a>
+        </section>
+
+        <!-- Seção de Cursos em Destaque (ATUALIZADA) -->
+        <section id="cursos" class="bg-white py-20 px-4">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-6">Explore Nossos Cursos</h2>
+
+                <!-- Filtros de Categoria -->
+                <div id="filter-container" class="flex justify-center flex-wrap gap-2 mb-12">
+                    <button data-filter="all" class="filter-btn bg-brand-orange text-white px-5 py-2 rounded-lg font-medium transition duration-300">Todos</button>
+                    <button data-filter="marketing" class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-lg font-medium transition duration-300">Marketing</button>
+                    <button data-filter="financas" class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-lg font-medium transition duration-300">Finanças</button>
+                    <button data-filter="renda-extra" class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-lg font-medium transition duration-300">Renda Extra</button>
+                    <button data-filter="des-pessoal" class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-lg font-medium transition duration-300">Des. Pessoal</button>
+                </div>
+                
+                <!-- Grade de Cursos -->
+                <div id="course-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Curso 1 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="marketing">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Marketing" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">MARKETING</span>
+                            <h3 class="text-xl font-bold my-2">Copywriting para Vendas Rápidas</h3>
+                            <p class="text-gray-600 text-sm mb-4">Aprenda a escrever textos persuasivos que vendem qualquer produto.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Ana Silva</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>2h 30min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <!-- Link ATUALIZADO com a classe 'course-link' -->
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 2 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="financas">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Finan%C3%A7as" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">FINANÇAS</span>
+                            <h3 class="text-xl font-bold my-2">Controle Financeiro para MEI</h3>
+                            <p class="text-gray-600 text-sm mb-4">O guia definitivo para não misturar suas contas pessoais e profissionais.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Bruno Costa</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>Tipo: <strong>Texto + Planilhas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Leitura: <strong>45min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 3 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="des-pessoal">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Pessoal" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">DES. PESSOAL</span>
+                            <h3 class="text-xl font-bold my-2">Produtividade Hacker</h3>
+                            <p class="text-gray-600 text-sm mb-4">Faça mais em menos tempo com técnicas comprovadas de gestão de tempo.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Carla Dias</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>1h 15min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 4 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="renda-extra">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Renda+Extra" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">RENDA EXTRA</span>
+                            <h3 class="text-xl font-bold my-2">Primeira Venda como Afiliado</h3>
+                            <p class="text-gray-600 text-sm mb-4">O passo a passo para começar a monetizar online sem criar um produto.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Daniel Alves</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>3h 05min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 5 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="marketing">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Marketing" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">MARKETING</span>
+                            <h3 class="text-xl font-bold my-2">Tráfego Pago para Iniciantes</h3>
+                            <p class="text-gray-600 text-sm mb-4">Aprenda a criar seus primeiros anúncios no Google e Facebook Ads.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Eduardo Faria</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>4h 10min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 6 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="financas">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Finan%C3%A7as" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">FINANÇAS</span>
+                            <h3 class="text-xl font-bold my-2">Como Investir do Zero</h3>
+                            <p class="text-gray-600 text-sm mb-4">Entenda os conceitos básicos de renda fixa e variável e comece a investir.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Bruno Costa</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>Tipo: <strong>Artigos</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Leitura: <strong>~2h total</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 7 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="des-pessoal">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Pessoal" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">DES. PESSOAL</span>
+                            <h3 class="text-xl font-bold my-2">Oratória para Empreendedores</h3>
+                            <p class="text-gray-600 text-sm mb-4">Perca o medo de falar em público e apresente suas ideias com confiança.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Fernanda Lima</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>1h 45min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 8 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="marketing">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Marketing" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">MARKETING</span>
+                            <h3 class="text-xl font-bold my-2">SEO para Blog</h3>
+                            <p class="text-gray-600 text-sm mb-4">Posicione seu conteúdo no topo do Google e atraia clientes de graça.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Ana Silva</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>2h 15min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 9 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col" data-category="renda-extra">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Renda+Extra" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">RENDA EXTRA</span>
+                            <h3 class="text-xl font-bold my-2">Criação de E-book PLR</h3>
+                            <p class="text-gray-600 text-sm mb-4">Crie e venda produtos digitais sem precisar escrever uma palavra.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Daniel Alves</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>Tipo: <strong>Texto (Guia)</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Leitura: <strong>30min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Cursos Escondidos (para carregar mais) -->
+
+                    <!-- Curso 10 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col hidden initially-hidden" data-category="financas">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Finan%C3%A7as" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">FINANÇAS</span>
+                            <h3 class="text-xl font-bold my-2">Declaração de Imposto (MEI)</h3>
+                            <p class="text-gray-600 text-sm mb-4">Não tenha mais dor de cabeça na hora de declarar seus impostos.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Bruno Costa</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>1h 10min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 11 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col hidden initially-hidden" data-category="marketing">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=Marketing" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">MARKETING</span>
+                            <h3 class="text-xl font-bold my-2">Marketing de Influência</h3>
+                            <p class="text-gray-600 text-sm mb-4">Como fechar parcerias estratégicas para alavancar sua marca.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Ana Silva</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <span>Tipo: <strong>Texto</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Leitura: <strong>25min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 12 -->
+                    <div class="course-item bg-white rounded-lg shadow-lg overflow-hidden flex flex-col hidden initially-hidden" data-category="des-pessoal">
+                        <img src="https://placehold.co/600x400/111827/FFFFFF?text=Pessoal" alt="Capa do Curso" class="w-full h-48 object-cover">
+                        <div class="p-6 flex-grow">
+                            <span class="text-sm font-semibold text-brand-orange">DES. PESSOAL</span>
+                            <h3 class="text-xl font-bold my-2">Gestão de Tempo Ágil</h3>
+                            <p class="text-gray-600 text-sm mb-4">Use métodos como Scrum e Kanban para organizar sua vida.</p>
+                            <!-- Detalhes do Curso -->
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>Professor: <strong>Carla Dias</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Tipo: <strong>Vídeo-aulas</strong></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Duração: <strong>1h 00min</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-50 border-t">
+                            <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botão Carregar Mais -->
+                <div id="load-more-container" class="text-center mt-16">
+                    <button id="load-more-btn" class="bg-brand-orange text-white px-10 py-4 rounded-lg font-bold text-lg shadow-lg hover:bg-orange-600 transition duration-300 transform hover:scale-105">
+                        Carregar Mais Cursos
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- Fim da Seção de Cursos -->
+
+        <!-- Seção de Preços -->
+        <section id="precos" class="bg-gray-50 py-20 px-4">
+            <div class="container mx-auto max-w-4xl">
+                <h2 class="text-3xl font-bold text-center mb-12">Acesso Ilimitado. Um Preço Simples.</h2>
+                
+                <div class="flex flex-col md:flex-row gap-8 justify-center">
+                    <!-- Plano Mensal -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 border border-gray-200 w-full">
+                        <h3 class="text-2xl font-bold text-center mb-4">Plano Mensal</h3>
+                        <p class="text-center text-gray-600 mb-6">Flexibilidade total.</p>
+                        <div class="text-center my-6">
+                            <span class="text-5xl font-extrabold text-brand-dark">R$39</span>
+                            <span class="text-xl text-gray-500">/mês</span>
+                        </div>
+                        <ul class="space-y-3 text-gray-600 mb-8">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Acesso a todos os cursos</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Novos mini-cursos toda semana</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Cancele quando quiser</li>
+                        </ul>
+                        <!-- NOVO: Adicionado id="subscribe-monthly-btn" -->
+                        <!-- NOVO: Adicionado data-price-id -->
+                        <a href="#" 
+                           id="subscribe-monthly-btn" 
+                           data-price-id="price_SEU_PLANO_MENSAL_AQUI"
+                           class="w-full text-center bg-brand-dark text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-gray-800 transition duration-300 block">
+                            Assinar o Mensal
+                        </a>
+                    </div>
+
+                    <!-- Plano Anual (Destaque) -->
+                    <div class="bg-white rounded-lg shadow-xl p-8 border-2 border-brand-orange w-full relative">
+                        <span class="absolute top-0 -mt-3 bg-brand-orange text-white text-xs font-bold px-4 py-1 rounded-full uppercase">Mais Popular</span>
+                        <h3 class="text-2xl font-bold text-center mb-4">Plano Anual</h3>
+                        <p class="text-center text-brand-orange font-semibold mb-6">Economize R$10/mês</p>
+                        <div class="text-center my-6">
+                            <span class="text-5xl font-extrabold text-brand-dark">R$29</span>
+                            <span class="text-xl text-gray-500">/mês</span>
+                        </div>
+                        <p class="text-center text-sm text-gray-500 mb-6">(Cobrado R$348 por ano)</p>
+                        <ul class="space-y-3 text-gray-600 mb-8">
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Acesso a todos os cursos</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Novos mini-cursos toda semana</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Certificados de conclusão</li>
+                        </ul>
+                        <!-- NOVO: Adicionado id="subscribe-annual-btn" -->
+                        <!-- NOVO: Adicionado data-price-id -->
+                        <a href="#" 
+                           id="subscribe-annual-btn" 
+                           data-price-id="price_SEU_PLANO_ANUAL_AQUI"
+                           class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300 block">
+                            Quero o Anual
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main> <!-- Fim do #main-page-content -->
+
+    
+    <!-- =================================== -->
+    <!--      CONTEÚDO DA PÁGINA DO CURSO     -->
+    <!-- =================================== -->
+    <main id="course-page-content" class="hidden main-content">
+        
+        <section class="py-12 px-4 container mx-auto">
+            <!-- Botão de Voltar -->
+            <div class="mb-8">
+                <a href="#" id="back-to-courses" class="font-medium text-brand-orange hover:text-orange-600 transition duration-300">
+                    &larr; Voltar para todos os cursos
+                </a>
+            </div>
+
+            <!-- Grid de Introdução do Curso -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                
+                <!-- Coluna Esquerda: Título, Descrição e CTA -->
+                <div class="md:col-span-2">
+                    <span id="course-page-category" class="text-sm font-semibold text-brand-orange">MARKETING</span>
+                    <h1 id="course-page-title" class="text-4xl md:text-5xl font-extrabold text-brand-dark my-3">
+                        Copywriting para Vendas Rápidas
+                    </h1>
+                    <p id="course-page-description" class="text-lg text-gray-600 mb-8">
+                        Aprenda a escrever textos persuasivos que vendem qualquer produto.
+                    </p>
+                    <!-- BOTÃO ATUALIZADO com id="start-course-btn" -->
+                    <a href="#" id="start-course-btn" class="bg-brand-orange text-white px-10 py-4 rounded-lg font-bold text-lg shadow-lg hover:bg-orange-600 transition duration-300 transform hover:scale-105">
+                        Iniciar Curso Agora
+                    </a>
+                </div>
+
+                <!-- Coluna Direita: Imagem e Detalhes -->
+                <div class="md:col-span-1">
+                    <img id="course-page-image" src="https://placehold.co/600x400/F97316/FFFFFF?text=Marketing" alt="Capa do Curso" class="w-full h-auto object-cover rounded-lg shadow-lg mb-6">
+                    
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-3">
+                        <div id="course-page-prof" class="flex items-center text-gray-700">
+                            <!-- Conteúdo dinâmico via JS -->
+                        </div>
+                        <div id="course-page-type" class="flex items-center text-gray-700">
+                            <!-- Conteúdo dinâmico via JS -->
+                        </div>
+                        <div id="course-page-duration" class="flex items-center text-gray-700">
+                            <!-- Conteúdo dinâmico via JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- Fim da Grid de Introdução -->
+
+            <!-- Seção "O que você vai aprender" -->
+            <div class="mt-16 md:mt-24 max-w-3xl">
+                <h2 class="text-3xl font-bold mb-6">O que você vai aprender</h2>
+                <!-- O conteúdo aqui é estático, mas você pode torná-lo dinâmico
+                     adicionando mais 'data-attributes' nos cards dos cursos -->
+                <div class="prose prose-lg text-gray-600 space-y-4">
+                    <p>Neste mini-curso, você vai dominar as técnicas fundamentais para transformar palavras em resultados.</p>
+                    <ul classa="space-y-2">
+                        <li class="flex items-start"><span class="text-brand-orange mr-2 mt-1">&#10003;</span><span>A estrutura AIDA (Atenção, Interesse, Desejo, Ação) na prática.</span></li>
+                        <li class="flex items-start"><span class="text-brand-orange mr-2 mt-1">&#10003;</span><span>Como usar gatilhos mentais de forma ética.</span></li>
+                        <li class="flex items-start"><span class="text-brand-orange mr-2 mt-1">&#10003;</span><span>Técnicas de storytelling para conectar com seu público.</span></li>
+                        <li class="flex items-start"><span class="text-brand-orange mr-2 mt-1">&#10003;</span><span>Como escrever headlines (títulos) que capturam a atenção.</span></li>
+                    </ul>
+                    <p>Ao final, você estará pronto para escrever páginas de vendas, e-mails e anúncios que realmente funcionam.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main> <!-- Fim do #course-page-content -->
+
+
+    <!-- =================================== -->
+    <!--      NOVO: CONTEÚDO DO PLAYER DE AULA  -->
+    <!-- =================================== -->
+    <main id="lesson-player-content" class="hidden main-content">
+        
+        <section class="py-12 px-4 container mx-auto">
+            <!-- Botão de Voltar -->
+            <div class="mb-6">
+                <a href="#" id="back-to-intro-btn" class="font-medium text-brand-orange hover:text-orange-600 transition duration-300">
+                    &larr; Voltar para a introdução
+                </a>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Coluna Principal: Vídeo Player -->
+                <div class="w-full lg:flex-grow">
+                    <h1 id="lesson-title" class="text-3xl font-extrabold text-brand-dark mb-4">
+                        Aula 1: O que é Copywriting?
+                    </h1>
+                    
+                    <!-- Player de Vídeo Responsivo -->
+                    <div class="w-full bg-black rounded-lg shadow-xl overflow-hidden aspect-video">
+                        <iframe 
+                            id="youtube-player"
+                            class="w-full h-full"
+                            src="" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    
+                    <!-- Descrição da Aula (Opcional) -->
+                    <div class="mt-6 prose prose-lg text-gray-600">
+                        <p>Nesta primeira aula, Ana Silva quebra os mitos sobre copywriting e mostra por que essa é a habilidade mais importante para quem quer vender na internet.</p>
+                        <p>Aperte o play e prepare-se para mudar sua forma de escrever.</p>
+                    </div>
+                </div>
+
+                <!-- Coluna Lateral: Conteúdo do Curso -->
+                <aside class="w-full lg:w-80 lg:flex-shrink-0">
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 sticky top-28">
+                        <h4 class="text-xl font-bold mb-4">Conteúdo do Curso</h4>
+                        <ul class="space-y-3">
+                            <!-- Aula 1 (Ativa) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 bg-orange-100 rounded-lg border border-brand-orange">
+                                    <svg class="w-6 h-6 text-brand-orange flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-semibold text-brand-dark">Aula 1: O que é Copywriting?</span>
+                                </a>
+                            </li>
+                            <!-- Aula 2 (Inativa) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
+                                    <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-medium text-gray-600">Aula 2: A Estrutura AIDA</span>
+                                </a>
+                            </li>
+                            <!-- Aula 3 (Inativa) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
+                                    <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-medium text-gray-600">Aula 3: Gatilhos Mentais</span>
+                                </a>
+                            </li>
+                             <!-- Aula 4 (Texto) -->
+                             <li>
+                                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
+                                    <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V6a1 1 0 011-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-medium text-gray-600">Template: Página de Vendas</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+    </main> <!-- Fim do #lesson-player-content -->
+
+
+    <!-- =================================== -->
+    <!--      NOVO: CONTEÚDO DA AULA EM TEXTO   -->
+    <!-- =================================== -->
+    <main id="text-lesson-content" class="hidden main-content">
+        
+        <section class="py-12 px-4 container mx-auto">
+            <!-- Botão de Voltar -->
+            <div class="mb-6">
+                <a href="#" id="back-to-intro-from-text-btn" class="font-medium text-brand-orange hover:text-orange-600 transition duration-300">
+                    &larr; Voltar para a introdução
+                </a>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Coluna Principal: Conteúdo de Texto -->
+                <div class="w-full lg:flex-grow">
+                    <h1 id="text-lesson-title" class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-6">
+                        <!-- Título preenchido via JS -->
+                    </h1>
+                    
+                    <!-- Conteúdo do Curso (formatado com 'prose') -->
+                    <div id="text-lesson-body" class="prose prose-lg max-w-none text-gray-700 prose-headings:text-brand-dark prose-strong:text-brand-dark prose-a:text-brand-orange">
+                        <!-- Conteúdo preenchido via JS -->
+                    </div>
+                </div>
+
+                <!-- Coluna Lateral: Conteúdo do Curso (Pode ser padronizada) -->
+                <aside class="w-full lg:w-80 lg:flex-shrink-0">
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 sticky top-28">
+                        <h4 class="text-xl font-bold mb-4">Conteúdo do Curso</h4>
+                        <ul class="space-y-3">
+                            <!-- Capítulo 1 (Ativo) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 bg-orange-100 rounded-lg border border-brand-orange">
+                                    <svg class="w-6 h-6 text-brand-orange flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V6a1 1 0 011-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-semibold text-brand-dark">Capítulo 1: A Mentalidade</span>
+                                </a>
+                            </li>
+                            <!-- Capítulo 2 (Inativo) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
+                                    <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V6a1 1 0 011-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-medium text-gray-600">Capítulo 2: Ferramentas</span>
+                                </a>
+                            </li>
+                            <!-- Capítulo 3 (Inativo) -->
+                            <li>
+                                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
+                                    <svg class="w-6 h-6 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 1h8a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V6a1 1 0 011-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                                    <span class="font-medium text-gray-600">Capítulo 3: O Fluxo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+    </main> <!-- Fim do #text-lesson-content -->
+
+
+    <!-- =================================== -->
+    <!--      NOVO: PÁGINA DE LOGIN           -->
+    <!-- =================================== -->
+    <main id="login-page-content" class="hidden main-content">
+        <section class="bg-gray-50 py-20 px-4">
+            <div class="container mx-auto max-w-md">
+                
+                <div class="bg-white rounded-lg shadow-xl p-8 border border-gray-200 w-full">
+                    <a href="#" id="back-to-home-from-login" class="font-medium text-sm text-brand-orange hover:text-orange-600 transition duration-300">
+                        &larr; Voltar para a home
+                    </a>
+
+                    <h2 class="text-3xl font-bold text-center text-brand-dark my-4">Login</h2>
+                    <p class="text-center text-gray-600 mb-8">Acesse sua conta para continuar aprendendo.</p>
+                    
+                    <form action="#" method="POST">
+                        <div class="space-y-6">
+                            <!-- Email -->
+                            <div>
+                                <label for="login-email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="login-email" name="email" required
+                                       class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
+                            </div>
+
+                            <!-- Senha -->
+                            <div>
+                                <label for="login-password" class="block text-sm font-medium text-gray-700">Senha</label>
+                                <input type="password" id="login-password" name="password" required
+                                       class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
+                            </div>
+
+                            <!-- Botão de Entrar -->
+                            <div>
+                                <button type="submit" id="login-submit-btn"
+                                        class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300">
+                                    Entrar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Link para Cadastro -->
+                    <p class="text-center text-sm text-gray-600 mt-8">
+                        Não tem uma conta? 
+                        <a href="#" id="show-register-link" class="font-medium text-brand-orange hover:text-orange-600">
+                            Cadastre-se aqui
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main> <!-- Fim do #login-page-content -->
+
+    <!-- =================================== -->
+    <!--      NOVO: PÁGINA DE CADASTRO        -->
+    <!-- =================================== -->
+    <main id="register-page-content" class="hidden main-content">
+        <section class="bg-gray-50 py-20 px-4">
+            <div class="container mx-auto max-w-md">
+                
+                <div class="bg-white rounded-lg shadow-xl p-8 border border-gray-200 w-full">
+                    <a href="#" id="back-to-home-from-register" class="font-medium text-sm text-brand-orange hover:text-orange-600 transition duration-300">
+                        &larr; Voltar para a home
+                    </a>
+
+                    <h2 class="text-3xl font-bold text-center text-brand-dark my-4">Criar Conta</h2>
+                    <p class="text-center text-gray-600 mb-8">Comece seus 7 dias grátis agora mesmo.</p>
+                    
+                    <form action="#" method="POST">
+                        <div class="space-y-6">
+                            <!-- Nome -->
+                            <div>
+                                <label for="register-name" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+                                <input type="text" id="register-name" name="name" required
+                                       class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
+                            </div>
+
+                            <!-- Email -->
+                            <div>
+                                <label for="register-email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="register-email" name="email" required
+                                       class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
+                            </div>
+
+                            <!-- Senha -->
+                            <div>
+                                <label for="register-password" class="block text-sm font-medium text-gray-700">Crie uma Senha</label>
+                                <input type="password" id="register-password" name="password" required
+                                       class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
+                            </div>
+
+                            <!-- Botão de Criar Conta -->
+                            <div>
+                                <button type="submit"
+                                        class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300">
+                                    Criar minha conta
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Link para Login -->
+                    <p class="text-center text-sm text-gray-600 mt-8">
+                        Já tem uma conta? 
+                        <a href="#" id="show-login-link" class="font-medium text-brand-orange hover:text-orange-600">
+                            Faça login
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main> <!-- Fim do #register-page-content -->
+
+
+    <!-- =================================== -->
+    <!--      NOVO: MODAL DE ASSINATURA       -->
+    <!-- =================================== -->
+    <div id="subscribe-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center transform transition-all scale-95 opacity-0" 
+             style="transition: all 0.3s ease-out;">
+            <h3 class="text-2xl font-bold text-brand-dark mb-4">Conteúdo Exclusivo</h3>
+            <p class="text-gray-600 mb-6">Este curso é exclusivo para assinantes. Assine um de nossos planos para ter acesso total!</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button id="close-modal-btn" class="w-full text-center bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition duration-300 order-2 sm:order-1">
+                    Fechar
+                </button>
+                <a href="#precos" id="modal-subscribe-link" class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300 order-1 sm:order-2">
+                    Ver Planos
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white pt-16 pb-8 px-4">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Coluna 1: Logo e Sobre -->
+            <div>
+                <a href="#" class="text-3xl font-extrabold">
+                    Synk<span class="text-brand-orange">Camp</span>
+                </a>
+                <p class="text-gray-400 mt-4 text-sm">
+                    A plataforma de mini-cursos para quem quer fazer acontecer.
+                </p>
+            </div>
+
+            <!-- Coluna 2: Links Rápidos -->
+            <div>
+                <h4 class="font-bold text-lg mb-4">Navegação</h4>
+                <ul class="space-y-2">
+                    <li><a href="#pilares" class="text-gray-400 hover:text-white text-sm">Categorias</a></li>
+                    <li><a href="#cursos" class="text-gray-400 hover:text-white text-sm">Cursos Populares</a></li>
+                    <li><a href="#precos" class="text-gray-400 hover:text-white text-sm">Nossos Preços</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm">Comece Agora</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 3: Legal -->
+            <div>
+                <h4 class="font-bold text-lg mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm">Termos de Uso</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm">Política de Privacidade</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white text-sm">Suporte</a></li>
+                </ul>
+            </div>
+
+            <!-- Coluna 4: Social -->
+            <div>
+                <h4 class="font-bold text-lg mb-4">Siga-nos</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11 1-3.57-.18-6.73-1.89-8.84-4.48C2.8 5.24 2.64 5.77 2.64 6.34c0 1.49.76 2.81 1.91 3.58-.71 0-1.37-.22-1.95-.54v.05c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 01-1.94.07 4.28 4.28 0 004 2.98-8.59 8.59 0 01-5.33 1.84c-.35 0-.69-.02-1.03-.06C3.44 20.29 5.7 21 8.12 21c9.74 0 15.06-8.06 15.06-15.06l-.01-.68c1.04-.75 1.94-1.69 2.65-2.75z"></path></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5zM16.5 7.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
+    
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Linha de Copyright -->
+        <div class="container mx-auto mt-12 border-t border-gray-700 pt-8 text-center">
+            <p class="text-gray-400 text-sm">&copy; 2025 SynkCamp. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript para Filtro, Carregar Mais E NAVEGAÇÃO DE PÁGINA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Variáveis de Elementos (Filtro e Carregar Mais) ---
+            const filterContainer = document.getElementById('filter-container');
+            const courseGrid = document.getElementById('course-grid');
+            // Adicionado: Verificação de nulidade para courseGrid
+            const allCourses = courseGrid ? Array.from(courseGrid.getElementsByClassName('course-item')) : [];
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const loadMoreContainer = document.getElementById('load-more-container');
+
+            let currentFilter = 'all';
+            let isLoggedIn = false; // NOVO: Estado de Login
+            let isSubscribed = false; // NOVO: Estado de Assinatura
+
+            // --- Novas Variáveis de Página (Navegação) ---
+            const mainPageContent = document.getElementById('main-page-content');
+            const coursePageContent = document.getElementById('course-page-content');
+            const courseLinks = document.querySelectorAll('.course-link'); // Classe adicionada aos links "Ver curso"
+            const backToCoursesBtn = document.getElementById('back-to-courses');
+
+            // --- NOVAS Variáveis do Player de Aula ---
+            const lessonPlayerContent = document.getElementById('lesson-player-content');
+            const startCourseBtn = document.getElementById('start-course-btn');
+            const backToIntroBtn = document.getElementById('back-to-intro-btn');
+            const youtubePlayer = document.getElementById('youtube-player');
+            
+            // --- NOVAS Variáveis da Aula em Texto ---
+            const textLessonContent = document.getElementById('text-lesson-content');
+            const backToIntroFromTextBtn = document.getElementById('back-to-intro-from-text-btn');
+            const textLessonTitle = document.getElementById('text-lesson-title');
+            const textLessonBody = document.getElementById('text-lesson-body');
+            
+            // --- NOVAS Variáveis de Login/Cadastro ---
+            const loginPageContent = document.getElementById('login-page-content');
+            const registerPageContent = document.getElementById('register-page-content');
+            const loginBtn = document.getElementById('login-btn');
+            const signupBtn = document.getElementById('signup-btn');
+            const showRegisterLink = document.getElementById('show-register-link');
+            const showLoginLink = document.getElementById('show-login-link');
+            const backToHomeFromLogin = document.getElementById('back-to-home-from-login');
+            const backToHomeFromRegister = document.getElementById('back-to-home-from-register');
+
+            // --- NOVAS Variáveis de Navegação Logada ---
+            const loggedOutNav = document.getElementById('logged-out-nav');
+            const loggedInNav = document.getElementById('logged-in-nav');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginSubmitBtn = document.getElementById('login-submit-btn');
+
+            // --- NOVAS Variáveis de Assinatura e Modal ---
+            const subscribeModal = document.getElementById('subscribe-modal');
+            const modalContent = subscribeModal ? subscribeModal.querySelector('div') : null;
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalSubscribeLink = document.getElementById('modal-subscribe-link');
+            const subscribeMonthlyBtn = document.getElementById('subscribe-monthly-btn');
+            const subscribeAnnualBtn = document.getElementById('subscribe-annual-btn');
+
+
+            <!-- NOVO: Chave Pública de TESTE do Stripe -->
+            <!-- ⚠️ Troque pela sua Chave Pública (Publishable Key) do Stripe -->
+            const stripe = Stripe('pk_live_51SLo754fTLmSifauBw2gI7tUiDbgUXqQdfPdn1tGyaDqIGRLI6MpO4VkbyNQhGP5FbGOVHjRElbJDe8MCBIwhCnM00GKOC12Hi');
+
+            // Lista de todas as "páginas"
+            const allPages = [
+                mainPageContent, 
+                coursePageContent, 
+                lessonPlayerContent, 
+                textLessonContent, 
+                loginPageContent, 
+                registerPageContent
+            ];
+
+            // Lista de cursos de leitura
+            const textCourses = [
+                'Controle Financeiro para MEI',
+                'Como Investir do Zero',
+                'Criação de E-book PLR',
+                'Marketing de Influência'
+            ];
+
+            // NOVO: Lista de cursos de vídeo
+            const videoCourses = [
+                'Copywriting para Vendas Rápidas',
+                'Produtividade Hacker',
+                'Primeira Venda como Afiliado',
+                'Tráfego Pago para Iniciantes',
+                'Oratória para Empreendedores',
+                'SEO para Blog',
+                'Declaração de Imposto (MEI)',
+                'Gestão de Tempo Ágil'
+            ];
+
+            // NOVO: Lista de categorias Premium
+            const premiumCategories = ['financas', 'renda-extra', 'des-pessoal'];
+            const premiumCategoriesPT = ['FINANÇAS', 'RENDA EXTRA', 'DES. PESSOAL'];
+
+
+            // Conteúdo do Guia MEI (convertido para HTML)
+            const meiGuideContent = `
+                <h2>Capítulo 1: A Mentalidade Financeira do MEI (O Alicerce)</h2>
+                <p>Abrir um MEI é um ato de coragem. É o primeiro passo para transformar uma ideia em um negócio, uma habilidade em uma fonte de renda, um sonho em um CNPJ. No entanto, o que separa os MEIs que prosperam daqueles que patinam e, eventualmente, desistem, raramente é a falta de talento técnico. O marceneiro pode ser brilhante, a confeiteira pode ter um produto divino, e o consultor pode ser um gênio. Onde, então, mora o perigo?</p>
+                <p>A resposta, quase invariavelmente, está no controle financeiro.</p>
+                
+                <h3>🧠 Por que o controle financeiro é o motor do seu negócio?</h3>
+                <p>Muitos empreendedores iniciantes enxergam o controle financeiro como uma tarefa burocrática, um "mal necessário" que se resume a "pagar contas". Eles o tratam como o freio do carro: algo que só usam quando o problema já apareceu.</p>
+                <p>Essa visão é fundamentalmente equivocada. O controle financeiro não é o freio; é o motor e o painel de controle, tudo ao mesmo tempo.</p>
+                <p>Não é sobre "pagar contas", é sobre ter poder de decisão.</p>
+                <p>Imagine pilotar um carro em uma estrada desconhecida, à noite, sem faróis e sem painel. Você não sabe sua velocidade, não sabe quanto combustível tem, não sabe se o motor está superaquecendo. Você está apenas... reagindo ao que aparece imediatamente à sua frente. É assim que um MEI opera sem controle financeiro.</p>
+                <p>Com um controle financeiro eficaz, você sai do modo "reação" e entra no modo "estratégia". O objetivo muda de "será que consigo pagar o DAS esse mês?" para:</p>
+                <ul>
+                    <li><strong>Estratégia:</strong> "Qual produto me dá a maior margem de lucro? Devo focar minhas vendas nele?"</li>
+                    <li><strong>Crescimento:</strong> "Pelos meus registros, meus custos fixos estão cobertos. Quanto posso reinvestir em marketing para atrair mais clientes?"</li>
+                    <li><strong>Liberdade:</strong> "Eu sei exatamente quanto meu negócio lucra. Posso me dar ao luxo de tirar uma semana de férias em março, pois meu fluxo de caixa projetado permite isso."</li>
+                </ul>
+                <p>O controle financeiro transforma a ansiedade (o desconhecido) em confiança (dados). Ele é a ferramenta que permite que você, o dono, realmente dirija o negócio, em vez de ser levado por ele.</p>
+                
+                <h3>🚨 O Erro Fatal #1: Misturar Finanças Pessoais (PF) e Empresariais (PJ)</h3>
+                <p>Este é, sem sombra de dúvida, o erro mais comum e mais destrutivo que um MEI pode cometer. É o "pecado original" do microempreendedor.</p>
+                <p>Começa de forma inocente: "Ah, vou só pagar essa conta de luz de casa com o dinheiro da venda de hoje, depois eu reponho". Ou o inverso: "Estou sem saldo na conta da empresa, vou pagar o fornecedor com meu cartão de crédito pessoal".</p>
+                <p>Pronto. A porta do caos foi aberta.</p>
+                
+                <h4>Por que isso destrói seu negócio?</h4>
+                <ul>
+                    <li><strong>Visão Turva (A Ilusão do Lucro ou Prejuízo):</strong> Se você paga o aluguel da sua casa (despesa PF) com o dinheiro da empresa (receita PJ), a sua empresa vai parecer menos lucrativa do que realmente é. Pior: se você usa seu salário de um emprego antigo (reserva PF) para comprar material para o MEI (custo PJ), seu negócio vai parecer mais lucrativo do que é. Você cria uma "empresa zumbi": um negócio que já quebrou, mas que está sendo mantido vivo artificialmente pelo seu dinheiro pessoal, e você nem percebe.</li>
+                    <li><strong>Risco Fiscal (Confusão Patrimonial):</strong> Para a Receita Federal, o CNPJ é uma entidade e o CPF é outra. Quando você mistura os dois de forma sistemática, você comete algo chamado "confusão patrimonial". Em uma fiscalização, isso pode levar a Receita a desconsiderar a separação e cobrar impostos da empresa em cima do seu patrimônio pessoal, ou vice-versa. Para o MEI, o risco imediato é na Declaração de Imposto de Renda Pessoa Física (IRPF). Você não sabe quanto distribuiu de lucro isento e quanto foi pró-labore. A mistura torna impossível justificar seus ganhos pessoais para o Leão.</li>
+                    <li><strong>Falta de Métricas (Morte da Estratégia):</strong> Se o dinheiro do supermercado está na mesma planilha que o dinheiro do fornecedor, como você vai calcular sua Margem de Lucro (veremos no Capítulo 5)? Como você saberá seu Ponto de Equilíbrio? A resposta é simples: você não vai. Você perdeu a capacidade de medir a saúde do seu negócio.</li>
+                </ul>
+                
+                <h4>A Regra de Ouro: "A empresa paga você, você não paga pela empresa."</h4>
+                <p>Grave esta frase: O seu CNPJ é o seu primeiro cliente.</p>
+                <p>O dinheiro que entra na sua empresa (na conta PJ) não é seu. É da empresa. A empresa, por sua vez, tem uma obrigação: pagar o seu "salário" de dono (o pró-labore).</p>
+                <p>O fluxo correto é:</p>
+                <ol>
+                    <li>A empresa vende e recebe o dinheiro na conta PJ.</li>
+                    <li>A empresa paga todas as suas próprias despesas (DAS, fornecedor, aluguel da sala comercial, internet do negócio) usando o dinheiro da conta PJ.</li>
+                    <li>Uma vez por mês, a empresa transfere um valor fixo (o seu pró-labore) da conta PJ para a sua conta PF.</li>
+                </ol>
+                <p>É com esse dinheiro, na sua conta PF, que você paga a luz de casa, o supermercado e a escola das crianças.</p>
+                <p>O que sobra na conta PJ depois de pagar tudo (incluindo seu pró-labore)? Isso se chama Lucro. E o lucro também é da empresa, para ser reinvestido ou distribuído ao dono depois.</p>
+                
+                <h3>🏦 A "Conta Dupla": A Necessidade Prática</h3>
+                <p>Para que a "Regra de Ouro" funcione, você precisa de um campo de futebol dividido. Você precisa de duas contas bancárias.</p>
+                <ul>
+                    <li><strong>Conta Corrente Pessoa Física (PF):</strong> Você já tem. É a sua conta pessoal, para sua vida.</li>
+                    <li><strong>Conta Corrente Pessoa Jurídica (PJ):</strong> A conta do seu CNPJ.</li>
+                </ul>
+                <p><strong>"Mas MEI é obrigado a ter conta PJ?"</strong></p>
+                <p>Legalmente, não. A lei não obriga o MEI a ter uma conta PJ.</p>
+                <p><strong>"Então por que ter?"</strong></p>
+                <p>Porque é praticamente impossível aplicar a separação sem ela. É como tentar separar água e óleo dentro do mesmo copo enquanto você o balança.</p>
+                <p>Ter uma conta PJ, hoje, é trivial. Diversos bancos digitais oferecem contas PJ gratuitas, sem taxa de manutenção, com transferências (Pix) ilimitadas e, muitas vezes, até com emissor de boletos. Não há desculpa.</p>
+                <p>O fluxo se torna simples:</p>
+                <ul>
+                    <li>Cliente pagou? O dinheiro cai na PJ.</li>
+                    <li>Precisa comprar matéria-prima? Pague com o cartão de débito da PJ.</li>
+                    <li>Chegou o dia do seu "salário"? Faça um Pix da PJ para a PF.</li>
+                </ul>
+                <p>Essa disciplina é o primeiro e mais importante pilar de todo o seu controle financeiro.</p>
+                
+                <h3>💰 Definindo seu Pró-labore: O "Salário" do Dono</h3>
+                <p>O Pró-labore (do latim, "pelo trabalho") é a remuneração, o "salário", que o sócio ou dono recebe pelo trabalho que executa na empresa. Note a palavra: <strong>executa</strong>.</p>
+                <p>Ele não é o lucro. O lucro é o prêmio pelo risco de empreender. O pró-labore é o pagamento pelo seu trabalho de padeiro, designer, motorista ou gerente.</p>
+                <p><strong>Por que ele é vital?</strong></p>
+                <p>Porque o pró-labore é um Custo Fixo da sua empresa. O seu negócio precisa ter dinheiro para pagar seu funcionário mais importante: você.</p>
+                <p>Se você não define um pró-labore e simplesmente "pega dinheiro quando precisa", você nunca saberá o custo real da sua operação. Sua empresa pode parecer lucrativa, mas só porque ela não está pagando o seu principal funcionário.</p>
+                
+                <h4>Como definir seu "salário" de dono?</h4>
+                <p>No começo, seja conservador. Não sangre a empresa antes que ela possa andar. Existem duas abordagens principais:</p>
+                <ol>
+                    <li><strong>Abordagem de Custo Pessoal (O Mínimo Viável):</strong>
+                        <p>Some todas as suas contas pessoais (aluguel, luz, água, mercado, internet, lazer). Exemplo: R$ 2.500,00. Esse é o valor mínimo que sua empresa precisa transferir para sua conta PF para você "sobreviver". Esse é o seu pró-labore inicial. O objetivo da empresa passa a ser: faturar o suficiente para pagar todos os custos (DAS, fornecedores, etc.) E TAMBÉM esses R$ 2.500,00.</p>
+                    </li>
+                    <li><strong>Abordagem de Mercado (O Valor Justo):</strong>
+                        <p>Quanto você pagaria para uma pessoa fazer exatamente o que você faz hoje na sua empresa? Se você é um MEI desenvolvedor, qual o salário júnior de um desenvolvedor? Se você é uma MEI confeiteira, qual o salário de uma boa confeiteira na sua região? Isso ajuda a evitar distorções. Muitos donos "acham" que merecem R$ 10.000 por mês, mas o trabalho que executam vale R$ 3.000 no mercado. Defina um valor de mercado como seu pró-labore.</p>
+                    </li>
+                </ol>
+                <p><strong>Recomendação:</strong> Comece com a Abordagem 1 (Mínimo Viável). Quando a empresa começar a gerar lucro consistentemente, você pode reajustar seu pró-labore, como se fosse um aumento de salário.</p>
+                <p>O pró-labore deve ser um valor fixo e pago em uma data fixa (ex: todo dia 5). Trate-se como um funcionário. Isso cria disciplina para você e previsibilidade para o caixa da sua empresa.</p>
+                
+                <hr>
+                
+                <h2>Capítulo 2: As Ferramentas do Controle (O Cinto de Utilidades)</h2>
+                <p>Com a mentalidade correta (Capítulo 1), precisamos agora das ferramentas para colocar a organização em prática. A melhor ferramenta de controle financeiro é aquela que você usa consistentemente. Não adianta ter o software mais caro e complexo se ele fica abandonado.</p>
+                <p><strong>A disciplina de registrar é mais importante que a plataforma de registro.</strong> Vamos analisar as opções, da mais simples à mais robusta.</p>
+                
+                <h3>🧰 Análise das Ferramentas Disponíveis</h3>
+                
+                <h4>1. O Caderno (Analógico)</h4>
+                <p>O bom e velho "livro-caixa" de capa preta ou o caderno de escola.</p>
+                <ul>
+                    <li><strong>Prós:</strong> Simplicidade (Não requer aprendizado técnico), Baixo Custo (Gratuito), Tátil.</li>
+                    <li><strong>Contras:</strong> Risco de Perda (fogo, água, sumiço), Erros Manuais (soma), Sem Automação, Retrabalho.</li>
+                    <li><strong>Veredito:</strong> Melhor que nada, mas extremamente arriscado e ineficiente.</li>
+                </ul>
+                
+                <h4>2. Planilhas (Excel / Google Sheets)</h4>
+                <p>Este é o ponto de equilíbrio ideal para 90% dos MEIs que estão começando. O Google Sheets (Planilhas Google) é particularmente poderoso por ser gratuito, salvar na nuvem (sem risco de perda) e ser acessível do celular ou computador.</p>
+                <ul>
+                    <li><strong>Prós:</strong> Automação de Baixo Custo (fórmulas), Personalização, Análise de Dados (filtros, gráficos), Gratuito e Seguro.</li>
+                    <li><strong>Contras:</strong> Requer Disciplina (alimentar a planilha), Curva de Aprendizado (básica), Risco de "Quebrar" (deletar fórmula).</li>
+                    <li><strong>Veredito:</strong> A ferramenta de entrada recomendada. Oferece o melhor balanço entre controle, poder de análise e custo.</li>
+                </ul>
+                
+                <h4>3. Aplicativos e Softwares de Gestão (SaaS)</h4>
+                <p>Aqui entramos no campo dos serviços pagos (embora muitos tenham versões gratuitas limitadas). Exemplos incluem Qipu, Conta Azul, Meu MEI, Controlle, entre outros.</p>
+                <ul>
+                    <li><strong>Prós:</strong> Automação Avançada (conciliação bancária), Interface Amigável, Relatórios Prontos, Funções Extras (Emissão de NF-e, DAS).</li>
+                    <li><strong>Contras:</strong> Custo (assinatura mensal), Engessamento (layout fixo), Complexidade Desnecessária (para alguns).</li>
+                    <li><strong>Quando vale a pena?</strong> Alto volume de transações, necessidade de emitir muitas NF-e, ou quando você gasta mais tempo na planilha do que no negócio.</li>
+                </ul>
+
+                <h3>📊 O Modelo de Planilha Essencial</h3>
+                <p>Se você optou pela planilha (ótima escolha!), não precisa complicar. Uma planilha de Fluxo de Caixa Simples é tudo que você precisa para começar. Ela é, na verdade, um "Livro-Caixa" digital.</p>
+                <p>Quais colunas são indispensáveis?</p>
+                <ul>
+                    <li><strong>Data:</strong> (Ex: 08/11/2025) - Quando a transação aconteceu.</li>
+                    <li><strong>Descrição:</strong> (Ex: Venda Serviço Consultoria - Cliente X) - O que foi?</li>
+                    <li><strong>Categoria:</strong> (Ex: Receita-Serviço / Custo-Matéria Prima) - A mais importante para análise.</li>
+                    <li><strong>Tipo:</strong> (Ex: Entrada / Saída)</li>
+                    <li><strong>Valor:</strong> (Ex: R$ 500,00)</li>
+                    <li><strong>Conta:</strong> (Ex: Conta PJ / Caixa Físico) - Onde o dinheiro estava.</li>
+                    <li><strong>Status:</strong> (Ex: Pago / Pendente) - Essencial para gerenciar contas a pagar/receber.</li>
+                </ul>
+                
+                <h4>Por que a "Categoria" é a mágica?</h4>
+                <p>Porque é com ela que você vai responder perguntas estratégicas. Crie categorias-padrão. Por exemplo:</p>
+                <ul>
+                    <li><strong>Categorias de Entrada:</strong> Receita-Produto A, Receita-Produto B, Receita-Serviço.</li>
+                    <li><strong>Categorias de Saída (Custos Fixos):</strong> DAS, Aluguel, Internet, Pró-Labore, Software.</li>
+                    <li><strong>Categorias de Saída (Custos Variáveis):</strong> Matéria-Prima, Embalagem, Frete-Venda, Comissão-Marketplace.</li>
+                </ul>
+                
+                <h4>Demonstração de Uso (Exemplo de Planilha):</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Conta</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01/11</td>
+                                <td>Saldo Inicial</td>
+                                <td>-</td>
+                                <td>Entrada</td>
+                                <td>R$ 500,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>03/11</td>
+                                <td>Venda Site - Cliente XPTO</td>
+                                <td>Receita-Serviço</td>
+                                <td>Entrada</td>
+                                <td>R$ 1.200,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>05/11</td>
+                                <td>Pagamento Pró-Labore</td>
+                                <td>Pró-Labore</td>
+                                <td>Saída</td>
+                                <td>R$ 800,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>06/11</td>
+                                <td>Compra Tecidos - Fornec. A</td>
+                                <td>Custo-Matéria Prima</td>
+                                <td>Saída</td>
+                                <td>R$ 350,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>07/11</td>
+                                <td>Venda Bolsa - Cliente B</td>
+                                <td>Receita-Produto A</td>
+                                <td>Entrada</td>
+                                <td>R$ 150,00</td>
+                                <td>Caixa Físico</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>08/11</td>
+                                <td>Pagamento DAS (Ref. Out)</td>
+                                <td>Imposto-DAS</td>
+                                <td>Saída</td>
+                                <td>R$ 72,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pago</td>
+                            </tr>
+                            <tr>
+                                <td>10/11</td>
+                                <td>Venda Consultoria - Cli. C</td>
+                                <td>Receita-Serviço</td>
+                                <td>Entrada</td>
+                                <td>R$ 400,00</td>
+                                <td>Conta PJ</td>
+                                <td>Pendente</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-4">Com essa estrutura simples, no fim do mês você pode filtrar pela coluna "Categoria" e descobrir:</p>
+                <ul>
+                    <li>Quanto você faturou com "Receita-Serviço" (R$ 1.200 + R$ 400)?</li>
+                    <li>Quanto gastou de "Custo-Matéria Prima" (R$ 350)?</li>
+                    <li>Quanto tem a receber (Filtrar "Status" = Pendente) (R$ 400)?</li>
+                </ul>
+                <p><strong>Você acabou de criar a base para todo o seu controle financeiro.</strong></p>
+            `;
+
+            // Conteúdo placeholder para outros cursos de texto
+            const placeholderContent = `
+                <h2>Conteúdo em Breve</h2>
+                <p>Este mini-curso está sendo cuidadosamente preparado por nossos especialistas.</p>
+                <p>Em breve, você terá acesso a um conteúdo incrível e direto ao ponto sobre este assunto.</p>
+                <p>Volte em alguns dias!</p>
+            `;
+
+            // URL do vídeo específico (Removida a de copywriting)
+            // const copywritingVideoUrl = "https://www.youtube.com/embed/PbA-a-W2-V8?autoplay=1&rel=0"; // Link antigo
+            
+            // NOVO: URL do Google Drive (convertida para /preview para funcionar no iframe)
+            const googleDriveVideoUrl = "https://drive.google.com/file/d/1i7xciP8_lJC0rMDi__gg4os0eGEyGTpU/preview";
+
+
+            // --- NOVAS Funções de Navegação ---
+            function hideAllPages() {
+                allPages.forEach(page => {
+                    if (page) {
+                        page.classList.add('hidden');
+                    }
+                });
+            }
+
+            function showPage(pageToShow) {
+                hideAllPages();
+                if (pageToShow) {
+                    pageToShow.classList.remove('hidden');
+                }
+                window.scrollTo(0, 0); // Rola para o topo ao trocar de página
+            }
+
+            // --- NOVAS Funções de Modal ---
+            function showSubscriptionModal() {
+                if (!subscribeModal || !modalContent) return;
+                subscribeModal.classList.remove('hidden');
+                // Força um reflow para a animação de entrada funcionar
+                setTimeout(() => {
+                    subscribeModal.style.opacity = 1;
+                    modalContent.style.opacity = 1;
+                    modalContent.style.transform = 'scale(1)';
+                }, 10);
+            }
+
+            function hideSubscriptionModal() {
+                if (!subscribeModal || !modalContent) return;
+                modalContent.style.opacity = 0;
+                modalContent.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    subscribeModal.classList.add('hidden');
+                    subscribeModal.style.opacity = 0; // Reseta para a próxima abertura
+                }, 300); // Tempo da animação
+            }
+
+
+            // NOVO: Atualiza a UI baseada no estado de login
+            function updateUIforLoginState() {
+                if (isLoggedIn) {
+                    if (loggedInNav) loggedInNav.classList.remove('hidden');
+                    if (loggedOutNav) loggedOutNav.classList.add('hidden');
+                } else {
+                    if (loggedInNav) loggedInNav.classList.add('hidden');
+                    if (loggedOutNav) loggedOutNav.classList.remove('hidden');
+                }
+                // Re-aplica o filtro atual para mostrar/esconder cursos de marketing
+                handleFilterClick(currentFilter);
+            }
+
+
+            // --- Lógica de Filtro (com verificação de nulidade) ---
+            if (filterContainer) {
+                filterContainer.addEventListener('click', (e) => {
+                    const target = e.target;
+                    if (target.tagName !== 'BUTTON') return;
+
+                    // Remove a classe 'ativa' de todos
+                    filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.classList.remove('bg-brand-orange', 'text-white');
+                        btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    });
+                    
+                    // Adiciona a classe 'ativa' ao clicado
+                    target.classList.add('bg-brand-orange', 'text-white');
+                    target.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+
+                    currentFilter = target.dataset.filter;
+                    
+                    // Aplicar o filtro
+                    handleFilterClick(currentFilter);
+                });
+            }
+
+            // --- Lógica de Carregar Mais (com verificação de nulidade) ---
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => {
+                    handleLoadMoreClick();
+                });
+            }
+
+            function updateLoadMoreButton() {
+                // Encontrar os cursos que estão escondidos E pertencem ao filtro atual
+                const hiddenCoursesInFilter = allCourses.filter(course => {
+                    const category = course.dataset.category;
+                    const isMarketing = category === 'marketing';
+                    const isPremium = premiumCategories.includes(category); // NOVO
+                    const matchesFilter = (currentFilter === 'all' || category === currentFilter);
+                    const isHidden = course.classList.contains('hidden');
+                    const isInitiallyHidden = course.classList.contains('initially-hidden');
+                    
+                    // NOVO: Não conte cursos de marketing se estiver deslogado
+                    if (isMarketing && !isLoggedIn) return false;
+                    // NOVO: Não conte cursos premium se não for assinante
+                    if (isPremium && !isSubscribed) return false;
+
+                    // Queremos contar os que estão 'initially-hidden' E 'hidden' E batem com o filtro
+                    return matchesFilter && isHidden && isInitiallyHidden;
+                });
+                
+                // Se não houver mais cursos escondidos nesse filtro, esconde o botão
+                if (loadMoreContainer) {
+                    if (hiddenCoursesInFilter.length === 0) {
+                        loadMoreContainer.classList.add('hidden');
+                    } else {
+                        loadMoreContainer.classList.remove('hidden');
+                    }
+                }
+            }
+
+            function handleFilterClick(filter) {
+                let visibleCount = 0;
+                const maxVisible = 9;
+
+                allCourses.forEach(course => {
+                    const category = course.dataset.category;
+                    const isInitiallyHidden = course.classList.contains('initially-hidden');
+                    const isMarketing = category === 'marketing';
+                    const isPremium = premiumCategories.includes(category); // NOVO
+                    const matchesFilter = (filter === 'all' || category === filter);
+                    
+                    // LÓGICA ATUALIZADA:
+                    // 1. Esconde se for marketing E usuário não logado
+                    if (isMarketing && !isLoggedIn) {
+                        course.classList.add('hidden');
+                    
+                    // 2. NOVO: Esconde se for premium E usuário não assinante
+                    } else if (isPremium && !isSubscribed) {
+                        course.classList.add('hidden');
+
+                    // 3. Esconde se não bater com o filtro
+                    } else if (!matchesFilter) {
+                        course.classList.add('hidden');
+
+                    // 4. Bate com o filtro E tem permissão
+                    } else {
+                        // Se for 'initially-hidden', mantenha escondido por enquanto
+                        if (isInitiallyHidden) {
+                            course.classList.add('hidden');
+                        } else {
+                            // Se não for 'initially-hidden', mostre
+                            course.classList.remove('hidden');
+                            visibleCount++; // Conta apenas os 9 primeiros
+                        }
+                    }
+                });
+                
+                // Esconde o botão "Carregar Mais" se não houver mais nada para carregar
+                updateLoadMoreButton();
+            }
+
+            function handleLoadMoreClick() {
+                // Encontra os próximos cursos escondidos que batem com o filtro
+                const hiddenCoursesToShow = allCourses.filter(course => {
+                    const category = course.dataset.category;
+                    const isMarketing = category === 'marketing';
+                    const isPremium = premiumCategories.includes(category); // NOVO
+                    const matchesFilter = (currentFilter === 'all' || category === currentFilter);
+                    const isHidden = course.classList.contains('hidden');
+                    const isInitiallyHidden = course.classList.contains('initially-hidden');
+                    
+                    // NOVO: Não mostre marketing se deslogado
+                    if (isMarketing && !isLoggedIn) return false;
+                    // NOVO: Não mostre premium se não for assinante
+                    if (isPremium && !isSubscribed) return false;
+
+                    return matchesFilter && isHidden && isInitiallyHidden;
+                });
+
+                // Mostra os próximos 3 (ou menos)
+                const coursesToShow = hiddenCoursesToShow.slice(0, 3);
+                coursesToShow.forEach(course => {
+                    course.classList.remove('hidden');
+                });
+                
+                // Atualiza o botão (esconde se não houver mais)
+                updateLoadMoreButton();
+            }
+
+            // Chamada inicial para o estado "Todos"
+            // ATUALIZADO: A chamada agora é 'updateUIforLoginState' que chama o 'handleFilterClick'
+            // updateLoadMoreButton(); // Chamada antiga
+
+
+            // --- Lógica de Navegação de Página (ATUALIZADA) ---
+
+            // 1. Clicar em "Ver curso"
+            if (courseLinks.length > 0) {
+                courseLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        // Encontra o card "pai"
+                        const courseCard = link.closest('.course-item');
+                        if (!courseCard) return;
+
+                        // Coleta os dados do card
+                        const categoryEl = courseCard.querySelector('.text-sm');
+                        const category = categoryEl ? categoryEl.innerText.toUpperCase() : '';
+                        const title = courseCard.querySelector('h3').innerText;
+                        const description = courseCard.querySelector('p').innerText;
+                        const imageSrc = courseCard.querySelector('img').src;
+                        
+                        // Coleta os detalhes (professor, tipo, duração)
+                        const detailsHtml = courseCard.querySelectorAll('.space-y-2 .flex');
+                        
+                        // --- NOVO: Verificação de Assinatura ---
+                        const isPremium = premiumCategoriesPT.includes(category);
+                        if (isPremium && !isSubscribed) {
+                            e.preventDefault();
+                            showSubscriptionModal();
+                            return; // Para a execução aqui
+                        }
+                        
+                        // --- Se tiver permissão, continua ---
+
+                        // Preenche a página do curso
+                        if (document.getElementById('course-page-category')) {
+                            document.getElementById('course-page-category').innerText = category;
+                        }
+                        if (document.getElementById('course-page-title')) {
+                            document.getElementById('course-page-title').innerText = title;
+                        }
+                        if (document.getElementById('course-page-description')) {
+                            document.getElementById('course-page-description').innerText = description;
+                        }
+                        if (document.getElementById('course-page-image')) {
+                            document.getElementById('course-page-image').src = imageSrc;
+                        }
+                        
+                        // Preenche os detalhes na lateral
+                        const profEl = document.getElementById('course-page-prof');
+                        const typeEl = document.getElementById('course-page-type');
+                        const durationEl = document.getElementById('course-page-duration');
+
+                        if (profEl && detailsHtml[0]) profEl.innerHTML = detailsHtml[0].innerHTML;
+                        if (typeEl && detailsHtml[1]) typeEl.innerHTML = detailsHtml[1].innerHTML;
+                        if (durationEl && detailsHtml[2]) durationEl.innerHTML = detailsHtml[2].innerHTML;
+                        
+                        // Troca as "páginas"
+                        showPage(coursePageContent);
+                    });
+                });
+            }
+
+            // 2. Voltar da INTRO para a HOME
+            if (backToCoursesBtn) {
+                backToCoursesBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(mainPageContent);
+                });
+            }
+
+            // 3. Ir da INTRO para a AULA (Player ou Texto)
+            if (startCourseBtn) {
+                startCourseBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Verifica se é o curso certo
+                    const currentTitle = document.getElementById('course-page-title')?.innerText;
+                    
+                    if (videoCourses.includes(currentTitle)) {
+                        // LÓGICA DO VÍDEO (AGORA PARA TODOS OS VÍDEOS)
+                        if (youtubePlayer) {
+                            // Carrega o player do Google Drive
+                            youtubePlayer.src = googleDriveVideoUrl; 
+                        }
+                        if (coursePageContent) coursePageContent.classList.add('hidden');
+                        if (lessonPlayerContent) lessonPlayerContent.classList.remove('hidden');
+                        
+                        // Atualiza o título da aula (pode ser genérico ou dinâmico)
+                        if (document.getElementById('lesson-title')) {
+                            document.getElementById('lesson-title').innerText = `Aula 1: ${currentTitle}`;
+                        }
+                        
+                        window.scrollTo(0, 0);
+                        
+                    } else if (textCourses.includes(currentTitle)) {
+                        // NOVA LÓGICA DE AULA EM TEXTO
+                        if (textLessonTitle) {
+                            // Define o título da página de aula
+                            if (currentTitle === 'Controle Financeiro para MEI') {
+                                textLessonTitle.innerText = '🏛️ Guia Mestre: O Controle Financeiro Definitivo (1/3)';
+                            } else {
+                                textLessonTitle.innerText = currentTitle;
+                            }
+                        }
+                        
+                        if (textLessonBody) {
+                            // Define o conteúdo da aula
+                            if (currentTitle === 'Controle Financeiro para MEI') {
+                                textLessonBody.innerHTML = meiGuideContent;
+                            } else {
+                                textLessonBody.innerHTML = placeholderContent;
+                            }
+                        }
+                        
+                        // Troca as "páginas"
+                        // CORREÇÃO DE BUG: Estava mostrando lessonPlayerContent em vez de textLessonContent
+                        showPage(textLessonContent);
+
+                    // REMOÇÃO DO BLOCO 'else if' DUPLICADO E CORRUPTO
+                    // } else if (textCourses.includes(currentTitle)) {
+                    //    } 
+                    //    
+                    //    // Troca as "páginas"
+                    //    showPage(textLessonContent);
+
+                    } else {
+                        // Se não for o curso de copy, não faz nada (ou mostra um aviso)
+                        console.warn('Vídeo/Texto para este curso ainda não configurado.');
+                        // Você pode adicionar uma UI de "em breve" aqui
+                    }
+                });
+            }
+
+            // 4. Voltar da AULA (Player) para a INTRO
+            if (backToIntroBtn) {
+                backToIntroBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Para o vídeo!
+                    if (youtubePlayer) {
+                        youtubePlayer.src = ""; // Limpa o src para parar o vídeo
+                    }
+                    
+                    // Troca as "páginas"
+                    showPage(coursePageContent);
+                });
+            }
+            
+            // 5. NOVO: Voltar da AULA (Texto) para a INTRO
+            if (backToIntroFromTextBtn) {
+                backToIntroFromTextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Troca as "páginas" de volta
+                    showPage(coursePageContent);
+                    
+                    // Limpa o conteúdo para não sobrecarregar
+                    if (textLessonBody) textLessonBody.innerHTML = "";
+                });
+            }
+
+            // --- NOVOS Event Listeners para Login/Cadastro ---
+
+            // 6. Clicar em "Entrar" no Header
+            if (loginBtn) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(loginPageContent);
+                });
+            }
+
+            // 7. Clicar em "Assinar Agora" no Header
+            if (signupBtn) {
+                signupBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(registerPageContent);
+                });
+            }
+
+            // 8. Clicar em "Cadastre-se aqui" (no form de login)
+            if (showRegisterLink) {
+                showRegisterLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(registerPageContent);
+                });
+            }
+
+            // 9. Clicar em "Faça login" (no form de cadastro)
+            if (showLoginLink) {
+                showLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(loginPageContent);
+                });
+            }
+
+            // 10. Voltar para Home (do Login)
+            if (backToHomeFromLogin) {
+                backToHomeFromLogin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(mainPageContent);
+                });
+            }
+
+            // 11. Voltar para Home (do Cadastro)
+            if (backToHomeFromRegister) {
+                backToHomeFromRegister.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(mainPageContent);
+                });
+            }
+
+            // --- NOVOS Event Handlers para Simular Login/Logout ---
+
+            // 12. Clicar no botão "Entrar" do formulário de login
+            if (loginSubmitBtn) {
+                loginSubmitBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Impede o envio real do formulário
+                    
+                    // Simula o login
+                    isLoggedIn = true;
+                    
+                    // Atualiza a UI (Header e Cursos)
+                    updateUIforLoginState();
+                    
+                    // Envia o usuário para a home (agora logado)
+                    showPage(mainPageContent);
+                });
+            }
+
+            // 13. Clicar no botão "Sair" do header
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Simula o logout
+                    isLoggedIn = false;
+                    isSubscribed = false; // NOVO: Reseta a assinatura
+                    
+                    // Atualiza a UI (Header e Cursos)
+                    updateUIforLoginState();
+                    
+                    // Garante que o usuário veja a página principal
+                    showPage(mainPageContent);
+                });
+            }
+
+            // --- NOVOS Event Handlers para Modal e Assinatura ---
+
+            // 14. Fechar o Modal
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', hideSubscriptionModal);
+            }
+
+            // 15. Link "Ver Planos" do Modal
+            if (modalSubscribeLink) {
+                modalSubscribeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    hideSubscriptionModal();
+                    showPage(mainPageContent);
+                    // Rola para a seção de preços após a página ser exibida
+                    setTimeout(() => {
+                        document.getElementById('precos')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                });
+            }
+
+            // 16. Lógica de Assinatura (para ambos os botões)
+            // ATUALIZADO: Função agora é async e chama o backend
+            async function handleSubscriptionClick(e) {
+                e.preventDefault();
+                const button = e.currentTarget;
+                const priceId = button.dataset.priceId;
+                const originalText = button.innerHTML;
+
+                // Mostra um "Carregando..."
+                button.innerHTML = 'Processando...';
+                button.disabled = true;
+
+                try {
+                    // 1. Chama o seu backend (o 'backend-exemplo.js')
+                    // ⚠️ Lembre-se de rodar seu backend e, se necessário, 
+                    //    mudar 'http://localhost:4242' para a URL real
+                    const response = await fetch('http://localhost:4242/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ priceId: priceId }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Erro ao se comunicar com o servidor.');
+                    }
+
+                    const session = await response.json();
+
+                    // 2. Redireciona para o Checkout do Stripe
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: session.id,
+                    });
+
+                    if (error) {
+                        // Se o Stripe.js falhar, mostra o erro
+                        console.error('Erro ao redirecionar para o Stripe:', error);
+                        alert(error.message); // Substitua por um modal de erro
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+
+                } catch (error) {
+                    // Se o seu backend falhar
+                    console.error('Erro na chamada de assinatura:', error);
+                    alert('Não foi possível iniciar o pagamento. Tente novamente.'); // Substitua por um modal
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+
+            if (subscribeMonthlyBtn) {
+                subscribeMonthlyBtn.addEventListener('click', handleSubscriptionClick);
+            }
+            if (subscribeAnnualBtn) {
+                subscribeAnnualBtn.addEventListener('click', handleSubscriptionClick);
+            }
+
+            // --- CHAMADA INICIAL ---
+            // Define o estado inicial da UI (logge-out) e esconde os cursos de mkt
+            updateUIforLoginState();
+
+        });
+    </script>
+</body>
+</html>
