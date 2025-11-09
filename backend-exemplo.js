@@ -31,10 +31,30 @@ app.use(express.json());
 // Pega a URL do seu site (frontend) das variáveis de ambiente
 const DOMINIO_DO_SEU_SITE = process.env.FRONTEND_URL || 'http://localhost:4242';
 
-// Configuração do CORS
+// --- Configuração do CORS ---
+// ✅ CORRIGIDO: Lista de permissões mais robusta
+const allowedOrigins = [
+  DOMINIO_DO_SEU_SITE, // A URL do seu GitHub (https://lucascsr96.github.io)
+  'https://lucascsr96.github.io', // Garantia explícita
+  'https://synk-camp.vercel.app' // O antigo, caso use
+];
+
 app.use(cors({
-  origin: [DOMINIO_DO_SEU_SITE, 'https://synk-camp.vercel.app'] 
+  origin: function (origin, callback) {
+    // Permite a origem se ela estiver na lista 'allowedOrigins'
+    // ou se a origem for 'undefined' (ex: testes de servidor local)
+    if (!origin || allowedOrigins.some(o => origin.startsWith(o))) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS: Acesso negado para esta origem.'));
+    }
+  }
 }));
+
+// Responde a solicitações 'OPTIONS' (checa-mate do CORS)
+app.options('*', cors()); 
+// --- Fim do CORS ---
+
 
 // Body parser para o checkout
 app.post('/create-checkout-session', async (req, res) => {
@@ -44,7 +64,7 @@ app.post('/create-checkout-session', async (req, res) => {
     // Validação
     if (!priceId || !userId) {
       console.warn("Chamada recebida sem priceId ou userId.");
-      return res.status(400).send({ error: 'Price ID e User ID são obrigatórios.' });
+      return res.status(400).json({ error: 'Price ID e User ID são obrigatórios.' });
     }
 
     console.log(`Criando sessão de checkout para userId: ${userId} e priceId: ${priceId}`);
@@ -58,8 +78,9 @@ app.post('/create-checkout-session', async (req, res) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${DOMINIO_DO_SEU_SITE}?payment=success`, // Redireciona de volta para o seu site
-      cancel_url: `${DOMINIO_DO_SEU_SITE}?payment=cancel`,  // Redireciona de volta para o seu site
+      // Usa a variável de ambiente para os redirecionamentos
+      success_url: `${DOMINIO_DO_SEU_SITE}?payment=success`, 
+      cancel_url: `${DOMINIO_DO_SEU_SITE}?payment=cancel`,  
       metadata: {
         userId: userId // Passa o Firebase UID para o metadata
       }
@@ -70,18 +91,11 @@ app.post('/create-checkout-session', async (req, res) => {
 
   } catch (error) {
     console.error("ERRO GRAVE ao criar sessão de checkout:", error);
-    
-    // ✅ CORREÇÃO PRINCIPAL:
-    // Em vez de enviar 'error.message' (que pode ser um objeto),
-    // enviamos um JSON simples e seguro.
     return res.status(500).json({ error: 'Falha ao criar sessão de pagamento no Stripe.' }); 
   }
 });
 
 // --- WEBHOOK DO STRIPE ---
-// (O Stripe nos avisa quando o pagamento é concluído)
-
-// O Webhook precisa do "raw body" (corpo cru), não do JSON
 app.post('/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -119,19 +133,14 @@ app.post('/stripe-webhook', express.raw({ type: 'application/json' }), async (re
         console.log(`Usuário ${userId} atualizado para 'premium' no Firestore.`);
         break;
       
-      // Adicione outros eventos se precisar (ex: 'customer.subscription.deleted')
-
       default:
         // Evento inesperado
     }
   } catch (error) {
     console.error("Erro ao processar evento do webhook:", error);
-    // Não envie um erro 500 para o Stripe, senão ele continuará tentando.
-    // Apenas logamos o erro.
   }
 
-  // ✅ CORREÇÃO BÔNUS:
-  // Envia uma resposta JSON válida. O Vercel não gosta de '.send()' vazio.
+  // Envia uma resposta JSON válida
   res.status(200).json({ received: true });
 });
 
