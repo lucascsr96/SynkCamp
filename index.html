@@ -2,27 +2,24 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SynkCamp - Mini-cursos de Empreendedorismo</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- NOVO: Tailwind Typography CDN (para formatar o texto do curso) -->
+    <!-- Tailwind Typography CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- NOVO: Stripe.js -->
+    <!-- Stripe.js -->
     <script src="https://js.stripe.com/v3/"></script>
 
     <style>
-        /* Aplicando a fonte Inter como padrão */
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Classe para definir um tamanho mínimo para a UI principal, 
-           evitando que o footer suba em páginas curtas como a do curso */
         .main-content {
             min-height: 60vh;
         }
@@ -34,8 +31,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-orange': '#F97316', // Laranja vibrante
-                        'brand-dark': '#111827',   // Um preto/cinza escuro
+                        'brand-orange': '#F97316', 
+                        'brand-dark': '#111827',   
                     },
                 }
             }
@@ -48,29 +45,29 @@
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
             <!-- Logo -->
-            <a href="#" class="text-3xl font-extrabold">
+            <a href="#" id="logo-link" class="text-3xl font-extrabold">
                 Synk<span class="text-brand-orange">Camp</span>
             </a>
 
             <!-- Links de Navegação (Desktop) -->
             <div class="hidden md:flex items-center space-x-6">
-                <a href="#pilares" class="text-gray-600 hover:text-brand-orange font-medium">Categorias</a>
+                <!-- ATUALIZADO: Removido #pilares que não existe -->
+                <a href="#cursos" class="text-gray-600 hover:text-brand-orange font-medium">Categorias</a>
                 <a href="#cursos" class="text-gray-600 hover:text-brand-orange font-medium">Cursos</a>
                 <a href="#precos" class="text-gray-600 hover:text-brand-orange font-medium">Preços</a>
-                <a href="#" class="text-gray-600 hover:text-brand-orange font-medium">Sobre Nós</a>
             </div>
 
             <!-- Botões de Ação (Desktop) -->
-            <!-- NOVO: Wrapper Logged Out -->
-            <div id="logged-out-nav" class="hidden md:flex items-center space-x-4">
+            <!-- Wrapper Logged Out -->
+            <div id="logged-out-nav" class="flex items-center space-x-4"> <!-- ATUALIZADO: Removido 'hidden' para ser o padrão -->
                 <a href="#" id="login-btn" class="font-medium text-gray-600 hover:text-brand-dark">Entrar</a>
-                <a href="#precos" id="signup-btn" class="bg-brand-orange text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-orange-600 transition duration-300">
+                <a href="#precos" id="signup-btn-nav" class="bg-brand-orange text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-orange-600 transition duration-300"> <!-- ID alterado para evitar conflito -->
                     Assinar Agora
                 </a>
             </div>
-            <!-- NOVO: Wrapper Logged In -->
-            <div id="logged-in-nav" class="hidden md:flex items-center space-x-4">
-                <span class="font-medium text-gray-700">Bem-vindo!</span>
+            <!-- Wrapper Logged In -->
+            <div id="logged-in-nav" class="hidden items-center space-x-4"> <!-- ATUALIZADO: Adicionado 'hidden' para ser o padrão -->
+                <a href="#" id="profile-btn" class="font-medium text-gray-700 hover:text-brand-orange">Meu Perfil</a>
                 <a href="#" id="logout-btn" class="bg-brand-dark text-white px-5 py-2 rounded-lg font-bold shadow-md hover:bg-gray-800 transition duration-300">
                     Sair
                 </a>
@@ -86,7 +83,7 @@
     </header>
 
     <!-- =================================== -->
-    <!--      CONTEÚDO DA PÁGINA PRINCIPAL    -->
+    <!--     CONTEÚDO DA PÁGINA PRINCIPAL    -->
     <!-- =================================== -->
     <main id="main-page-content" class="main-content">
 
@@ -103,7 +100,7 @@
             </a>
         </section>
 
-        <!-- Seção de Cursos em Destaque (ATUALIZADA) -->
+        <!-- Seção de Cursos em Destaque -->
         <section id="cursos" class="bg-white py-20 px-4">
             <div class="container mx-auto">
                 <h2 class="text-3xl font-bold text-center mb-6">Explore Nossos Cursos</h2>
@@ -143,7 +140,6 @@
                             </div>
                         </div>
                         <div class="p-6 bg-gray-50 border-t">
-                            <!-- Link ATUALIZADO com a classe 'course-link' -->
                             <a href="#" class="course-link font-bold text-brand-orange hover:text-orange-600">Ver curso &rarr;</a>
                         </div>
                     </div>
@@ -489,12 +485,10 @@
                             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Novos mini-cursos toda semana</li>
                             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Cancele quando quiser</li>
                         </ul>
-                        <!-- NOVO: Adicionado id="subscribe-monthly-btn" -->
-                        <!-- NOVO: Adicionado data-price-id -->
                         <a href="#" 
                            id="subscribe-monthly-btn" 
-                           data-price-id="price_1SRKmg4fTLmSifautWxgpu0E"
-                           class="w-full text-center bg-brand-dark text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-gray-800 transition duration-300 block">
+                           data-price-id="⚠️ COLE SEU ID DE PREÇO MENSAL AQUI (price_...)"
+                           class="subscription-button w-full text-center bg-brand-dark text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-gray-800 transition duration-300 block">
                             Assinar o Mensal
                         </a>
                     </div>
@@ -514,12 +508,10 @@
                             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Novos mini-cursos toda semana</li>
                             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Certificados de conclusão</li>
                         </ul>
-                        <!-- NOVO: Adicionado id="subscribe-annual-btn" -->
-                        <!-- NOVO: Adicionado data-price-id -->
                         <a href="#" 
                            id="subscribe-annual-btn" 
-                           data-price-id="price_1SRKnw4fTLmSifauavpg1vSA"
-                           class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300 block">
+                           data-price-id="⚠️ COLE SEU ID DE PREÇO ANUAL AQUI (price_...)"
+                           class="subscription-button w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300 block">
                             Quero o Anual
                         </a>
                     </div>
@@ -531,7 +523,7 @@
 
     
     <!-- =================================== -->
-    <!--      CONTEÚDO DA PÁGINA DO CURSO     -->
+    <!--     CONTEÚDO DA PÁGINA DO CURSO     -->
     <!-- =================================== -->
     <main id="course-page-content" class="hidden main-content">
         
@@ -555,7 +547,6 @@
                     <p id="course-page-description" class="text-lg text-gray-600 mb-8">
                         Aprenda a escrever textos persuasivos que vendem qualquer produto.
                     </p>
-                    <!-- BOTÃO ATUALIZADO com id="start-course-btn" -->
                     <a href="#" id="start-course-btn" class="bg-brand-orange text-white px-10 py-4 rounded-lg font-bold text-lg shadow-lg hover:bg-orange-600 transition duration-300 transform hover:scale-105">
                         Iniciar Curso Agora
                     </a>
@@ -583,8 +574,6 @@
             <!-- Seção "O que você vai aprender" -->
             <div class="mt-16 md:mt-24 max-w-3xl">
                 <h2 class="text-3xl font-bold mb-6">O que você vai aprender</h2>
-                <!-- O conteúdo aqui é estático, mas você pode torná-lo dinâmico
-                     adicionando mais 'data-attributes' nos cards dos cursos -->
                 <div class="prose prose-lg text-gray-600 space-y-4">
                     <p>Neste mini-curso, você vai dominar as técnicas fundamentais para transformar palavras em resultados.</p>
                     <ul classa="space-y-2">
@@ -603,7 +592,7 @@
 
 
     <!-- =================================== -->
-    <!--      NOVO: CONTEÚDO DO PLAYER DE AULA  -->
+    <!--     CONTEÚDO DO PLAYER DE AULA      -->
     <!-- =================================== -->
     <main id="lesson-player-content" class="hidden main-content">
         
@@ -686,7 +675,7 @@
 
 
     <!-- =================================== -->
-    <!--      NOVO: CONTEÚDO DA AULA EM TEXTO   -->
+    <!--     CONTEÚDO DA AULA EM TEXTO       -->
     <!-- =================================== -->
     <main id="text-lesson-content" class="hidden main-content">
         
@@ -748,7 +737,7 @@
 
 
     <!-- =================================== -->
-    <!--      NOVO: PÁGINA DE LOGIN           -->
+    <!--     PÁGINA DE LOGIN (REAL)          -->
     <!-- =================================== -->
     <main id="login-page-content" class="hidden main-content">
         <section class="bg-gray-50 py-20 px-4">
@@ -762,7 +751,12 @@
                     <h2 class="text-3xl font-bold text-center text-brand-dark my-4">Login</h2>
                     <p class="text-center text-gray-600 mb-8">Acesse sua conta para continuar aprendendo.</p>
                     
-                    <form action="#" method="POST">
+                    <!-- Mensagem de Erro de Login -->
+                    <div id="login-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                        <!-- Preenchido via JS -->
+                    </div>
+
+                    <form id="login-form">
                         <div class="space-y-6">
                             <!-- Email -->
                             <div>
@@ -801,7 +795,7 @@
     </main> <!-- Fim do #login-page-content -->
 
     <!-- =================================== -->
-    <!--      NOVO: PÁGINA DE CADASTRO        -->
+    <!--     PÁGINA DE CADASTRO (REAL)       -->
     <!-- =================================== -->
     <main id="register-page-content" class="hidden main-content">
         <section class="bg-gray-50 py-20 px-4">
@@ -815,11 +809,16 @@
                     <h2 class="text-3xl font-bold text-center text-brand-dark my-4">Criar Conta</h2>
                     <p class="text-center text-gray-600 mb-8">Comece seus 7 dias grátis agora mesmo.</p>
                     
-                    <form action="#" method="POST">
+                    <!-- Mensagem de Erro de Cadastro -->
+                    <div id="register-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                        <!-- Preenchido via JS -->
+                    </div>
+
+                    <form id="register-form">
                         <div class="space-y-6">
-                            <!-- Nome -->
+                            <!-- Nome (opcional, mas bom para o perfil) -->
                             <div>
-                                <label for="register-name" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+                                <label for="register-name" class="block text-sm font-medium text-gray-700">Seu Nome</label>
                                 <input type="text" id="register-name" name="name" required
                                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-brand-orange focus:border-brand-orange">
                             </div>
@@ -840,7 +839,7 @@
 
                             <!-- Botão de Criar Conta -->
                             <div>
-                                <button type="submit"
+                                <button type="submit" id="register-submit-btn"
                                         class="w-full text-center bg-brand-orange text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-orange-600 transition duration-300">
                                     Criar minha conta
                                 </button>
@@ -862,13 +861,54 @@
 
 
     <!-- =================================== -->
-    <!--      NOVO: MODAL DE ASSINATURA       -->
+    <!--     NOVO: PÁGINA DE PERFIL          -->
+    <!-- =================================== -->
+    <main id="profile-page-content" class="hidden main-content">
+        <section class="bg-gray-50 py-20 px-4">
+            <div class="container mx-auto max-w-2xl">
+                
+                <div class="bg-white rounded-lg shadow-xl p-8 border border-gray-200 w-full">
+                    <a href="#" id="back-to-home-from-profile" class="font-medium text-sm text-brand-orange hover:text-orange-600 transition duration-300">
+                        &larr; Voltar para a home
+                    </a>
+
+                    <h2 class="text-3xl font-bold text-center text-brand-dark my-4">Meu Perfil</h2>
+                    
+                    <div class="mt-8 space-y-4">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <span class="text-sm font-medium text-gray-500">Nome</span>
+                            <p id="profile-name" class="text-lg font-semibold text-brand-dark">Carregando...</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <span class="text-sm font-medium text-gray-500">Email</span>
+                            <p id="profile-email" class="text-lg font-semibold text-brand-dark">Carregando...</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <span class="text-sm font-medium text-gray-500">Status da Assinatura</span>
+                            <p id="profile-subscription" class="text-lg font-semibold text-brand-dark">Carregando...</p>
+                        </div>
+                    </div>
+
+                    <!-- Botão de Gerenciar Assinatura (Avançado) -->
+                    <!-- <div class="mt-10 text-center">
+                        <a href="#" class="font-medium text-brand-orange hover:text-orange-600">
+                            Gerenciar minha assinatura (Stripe Portal)
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+    </main> <!-- Fim do #profile-page-content -->
+
+
+    <!-- =================================== -->
+    <!--     MODAL DE ASSINATURA           -->
     <!-- =================================== -->
     <div id="subscribe-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
         <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center transform transition-all scale-95 opacity-0" 
              style="transition: all 0.3s ease-out;">
             <h3 class="text-2xl font-bold text-brand-dark mb-4">Conteúdo Exclusivo</h3>
-            <p class="text-gray-600 mb-6">Este curso é exclusivo para assinantes. Assine um de nossos planos para ter acesso total!</p>
+            <p class="text-gray-600 mb-6">Este curso é exclusivo para assinantes. Faça login e assine um de nossos planos para ter acesso total!</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <button id="close-modal-btn" class="w-full text-center bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition duration-300 order-2 sm:order-1">
                     Fechar
@@ -898,7 +938,7 @@
             <div>
                 <h4 class="font-bold text-lg mb-4">Navegação</h4>
                 <ul class="space-y-2">
-                    <li><a href="#pilares" class="text-gray-400 hover:text-white text-sm">Categorias</a></li>
+                    <!-- <li><a href="#pilares" class="text-gray-400 hover:text-white text-sm">Categorias</a></li> -->
                     <li><a href="#cursos" class="text-gray-400 hover:text-white text-sm">Cursos Populares</a></li>
                     <li><a href="#precos" class="text-gray-400 hover:text-white text-sm">Nossos Preços</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white text-sm">Comece Agora</a></li>
@@ -927,7 +967,7 @@
                     </a>
                     <a href="#" class="text-gray-400 hover:text-white">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5zM16.5 7.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
-    
+        
                     </a>
                 </div>
             </div>
@@ -939,859 +979,640 @@
         </div>
     </footer>
 
-    <!-- JavaScript para Filtro, Carregar Mais E NAVEGAÇÃO DE PÁGINA -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Variáveis de Elementos (Filtro e Carregar Mais) ---
-            const filterContainer = document.getElementById('filter-container');
-            const courseGrid = document.getElementById('course-grid');
-            // Adicionado: Verificação de nulidade para courseGrid
-            const allCourses = courseGrid ? Array.from(courseGrid.getElementsByClassName('course-item')) : [];
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            const loadMoreContainer = document.getElementById('load-more-container');
 
-            let currentFilter = 'all';
-            let isLoggedIn = false; // NOVO: Estado de Login
-            let isSubscribed = false; // NOVO: Estado de Assinatura
+    <!-- =================================== -->
+    <!--   SCRIPT PRINCIPAL (ATUALIZADO)   -->
+    <!-- =================================== -->
+    <script type="module">
+        // --- Importações e Inicialização do Firebase ---
+        
+        // Importações diretas do CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-            // --- Novas Variáveis de Página (Navegação) ---
-            const mainPageContent = document.getElementById('main-page-content');
-            const coursePageContent = document.getElementById('course-page-content');
-            const courseLinks = document.querySelectorAll('.course-link'); // Classe adicionada aos links "Ver curso"
-            const backToCoursesBtn = document.getElementById('back-to-courses');
+        // ✅ CORRIGIDO: Colei a sua Configuração real do Firebase que você me passou
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsEl1Y0iunUHA2psajykNmOcNqsW3O8QE",
+            authDomain: "synkcamp.firebaseapp.com",
+            projectId: "synkcamp",
+            storageBucket: "synkcamp.firebasestorage.app",
+            messagingSenderId: "285244628885",
+            appId: "1:285244628885:web:182bac4e13f1683b37609c",
+            measurementId: "G-64XSQ0KWZK"
+        };
 
-            // --- NOVAS Variáveis do Player de Aula ---
-            const lessonPlayerContent = document.getElementById('lesson-player-content');
-            const startCourseBtn = document.getElementById('start-course-btn');
-            const backToIntroBtn = document.getElementById('back-to-intro-btn');
-            const youtubePlayer = document.getElementById('youtube-player');
-            
-            // --- NOVAS Variáveis da Aula em Texto ---
-            const textLessonContent = document.getElementById('text-lesson-content');
-            const backToIntroFromTextBtn = document.getElementById('back-to-intro-from-text-btn');
-            const textLessonTitle = document.getElementById('text-lesson-title');
-            const textLessonBody = document.getElementById('text-lesson-body');
-            
-            // --- NOVAS Variáveis de Login/Cadastro ---
-            const loginPageContent = document.getElementById('login-page-content');
-            const registerPageContent = document.getElementById('register-page-content');
-            const loginBtn = document.getElementById('login-btn');
-            const signupBtn = document.getElementById('signup-btn');
-            const showRegisterLink = document.getElementById('show-register-link');
-            const showLoginLink = document.getElementById('show-login-link');
-            const backToHomeFromLogin = document.getElementById('back-to-home-from-login');
-            const backToHomeFromRegister = document.getElementById('back-to-home-from-register');
+        // Inicializar Firebase
+        let app, auth, db;
+        let firebaseReady = false; // Flag para verificar se a inicialização foi bem-sucedida
 
-            // --- NOVAS Variáveis de Navegação Logada ---
-            const loggedOutNav = document.getElementById('logged-out-nav');
-            const loggedInNav = document.getElementById('logged-in-nav');
-            const logoutBtn = document.getElementById('logout-btn');
-            const loginSubmitBtn = document.getElementById('login-submit-btn');
+        // Adiciona um try-catch para o caso do usuário não ter colado a config
+        try {
+            // (A checagem de "SUA_API_KEY" foi removida pois colamos a chave real)
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            firebaseReady = true; // Sucesso!
+        } catch (e) {
+            console.error("Erro ao inicializar o Firebase:", e.message);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'bg-red-500 text-white p-4 fixed top-0 left-0 w-full z-50 text-center';
+            errorDiv.innerText = 'ERRO DE CONFIGURAÇÃO: O Firebase não foi inicializado. Siga o Guia-Firebase-Stripe.md e cole sua `firebaseConfig` no index.html.';
+            document.body.prepend(errorDiv);
+        }
 
-            // --- NOVAS Variáveis de Assinatura e Modal ---
-            const subscribeModal = document.getElementById('subscribe-modal');
-            const modalContent = subscribeModal ? subscribeModal.querySelector('div') : null;
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const modalSubscribeLink = document.getElementById('modal-subscribe-link');
-            const subscribeMonthlyBtn = document.getElementById('subscribe-monthly-btn');
-            const subscribeAnnualBtn = document.getElementById('subscribe-annual-btn');
+        // --- Estado Global ---
+        let currentUser = null; // Guarda o usuário (auth.currentUser)
+        let userProfile = null; // Guarda o perfil do Firestore (com status de assinatura)
+        let currentFilter = 'all';
 
+        // --- Variáveis de Elementos (Globais) ---
+        const allPages = [
+            document.getElementById('main-page-content'),
+            document.getElementById('course-page-content'),
+            document.getElementById('lesson-player-content'),
+            document.getElementById('text-lesson-content'),
+            document.getElementById('login-page-content'),
+            document.getElementById('register-page-content'),
+            document.getElementById('profile-page-content') // NOVO
+        ].filter(Boolean); // Filtra nulos se algum ID estiver errado
 
-            <!-- NOVO: Chave Pública de TESTE do Stripe -->
-            <!-- ⚠️ Troque pela sua Chave Pública (Publishable Key) do Stripe -->
-            const stripe = Stripe('pk_live_51SLo754fTLmSifauBw2gI7tUiDbgUXqQdfPdn1tGyaDqIGRLI6MpO4VkbyNQhGP5FbGOVHjRElbJDe8MCBIwhCnM00GKOC12Hi');
+        // Navegação
+        const loggedOutNav = document.getElementById('logged-out-nav');
+        const loggedInNav = document.getElementById('logged-in-nav');
+        const logoLink = document.getElementById('logo-link');
 
-            // Lista de todas as "páginas"
-            const allPages = [
-                mainPageContent, 
-                coursePageContent, 
-                lessonPlayerContent, 
-                textLessonContent, 
-                loginPageContent, 
-                registerPageContent
-            ];
+        // Filtros/Cursos
+        const filterContainer = document.getElementById('filter-container');
+        const courseGrid = document.getElementById('course-grid');
+        const allCourses = courseGrid ? Array.from(courseGrid.getElementsByClassName('course-item')) : [];
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const loadMoreContainer = document.getElementById('load-more-container');
+        const courseLinks = document.querySelectorAll('.course-link');
 
-            // Lista de cursos de leitura
-            const textCourses = [
-                'Controle Financeiro para MEI',
-                'Como Investir do Zero',
-                'Criação de E-book PLR',
-                'Marketing de Influência'
-            ];
+        // Página de Curso
+        const backToCoursesBtn = document.getElementById('back-to-courses');
+        const startCourseBtn = document.getElementById('start-course-btn');
+        const coursePageContent = document.getElementById('course-page-content');
 
-            // NOVO: Lista de cursos de vídeo
-            const videoCourses = [
-                'Copywriting para Vendas Rápidas',
-                'Produtividade Hacker',
-                'Primeira Venda como Afiliado',
-                'Tráfego Pago para Iniciantes',
-                'Oratória para Empreendedores',
-                'SEO para Blog',
-                'Declaração de Imposto (MEI)',
-                'Gestão de Tempo Ágil'
-            ];
+        // Player de Aula
+        const lessonPlayerContent = document.getElementById('lesson-player-content');
+        const backToIntroBtn = document.getElementById('back-to-intro-btn');
+        const youtubePlayer = document.getElementById('youtube-player');
 
-            // NOVO: Lista de categorias Premium
-            const premiumCategories = ['financas', 'renda-extra', 'des-pessoal'];
-            const premiumCategoriesPT = ['FINANÇAS', 'RENDA EXTRA', 'DES. PESSOAL'];
+        // Aula em Texto
+        const textLessonContent = document.getElementById('text-lesson-content');
+        const backToIntroFromTextBtn = document.getElementById('back-to-intro-from-text-btn');
+        const textLessonTitle = document.getElementById('text-lesson-title');
+        const textLessonBody = document.getElementById('text-lesson-body');
 
+        // Páginas de Login/Cadastro
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtnNav = document.getElementById('signup-btn-nav'); // ID corrigido
+        const loginPageContent = document.getElementById('login-page-content');
+        const registerPageContent = document.getElementById('register-page-content');
+        const showRegisterLink = document.getElementById('show-register-link');
+        const showLoginLink = document.getElementById('show-login-link');
+        const backToHomeFromLogin = document.getElementById('back-to-home-from-login');
+        const backToHomeFromRegister = document.getElementById('back-to-home-from-register');
 
-            // Conteúdo do Guia MEI (convertido para HTML)
-            const meiGuideContent = `
-                <h2>Capítulo 1: A Mentalidade Financeira do MEI (O Alicerce)</h2>
-                <p>Abrir um MEI é um ato de coragem. É o primeiro passo para transformar uma ideia em um negócio, uma habilidade em uma fonte de renda, um sonho em um CNPJ. No entanto, o que separa os MEIs que prosperam daqueles que patinam e, eventualmente, desistem, raramente é a falta de talento técnico. O marceneiro pode ser brilhante, a confeiteira pode ter um produto divino, e o consultor pode ser um gênio. Onde, então, mora o perigo?</p>
-                <p>A resposta, quase invariavelmente, está no controle financeiro.</p>
-                
-                <h3>🧠 Por que o controle financeiro é o motor do seu negócio?</h3>
-                <p>Muitos empreendedores iniciantes enxergam o controle financeiro como uma tarefa burocrática, um "mal necessário" que se resume a "pagar contas". Eles o tratam como o freio do carro: algo que só usam quando o problema já apareceu.</p>
-                <p>Essa visão é fundamentalmente equivocada. O controle financeiro não é o freio; é o motor e o painel de controle, tudo ao mesmo tempo.</p>
-                <p>Não é sobre "pagar contas", é sobre ter poder de decisão.</p>
-                <p>Imagine pilotar um carro em uma estrada desconhecida, à noite, sem faróis e sem painel. Você não sabe sua velocidade, não sabe quanto combustível tem, não sabe se o motor está superaquecendo. Você está apenas... reagindo ao que aparece imediatamente à sua frente. É assim que um MEI opera sem controle financeiro.</p>
-                <p>Com um controle financeiro eficaz, você sai do modo "reação" e entra no modo "estratégia". O objetivo muda de "será que consigo pagar o DAS esse mês?" para:</p>
-                <ul>
-                    <li><strong>Estratégia:</strong> "Qual produto me dá a maior margem de lucro? Devo focar minhas vendas nele?"</li>
-                    <li><strong>Crescimento:</strong> "Pelos meus registros, meus custos fixos estão cobertos. Quanto posso reinvestir em marketing para atrair mais clientes?"</li>
-                    <li><strong>Liberdade:</strong> "Eu sei exatamente quanto meu negócio lucra. Posso me dar ao luxo de tirar uma semana de férias em março, pois meu fluxo de caixa projetado permite isso."</li>
-                </ul>
-                <p>O controle financeiro transforma a ansiedade (o desconhecido) em confiança (dados). Ele é a ferramenta que permite que você, o dono, realmente dirija o negócio, em vez de ser levado por ele.</p>
-                
-                <h3>🚨 O Erro Fatal #1: Misturar Finanças Pessoais (PF) e Empresariais (PJ)</h3>
-                <p>Este é, sem sombra de dúvida, o erro mais comum e mais destrutivo que um MEI pode cometer. É o "pecado original" do microempreendedor.</p>
-                <p>Começa de forma inocente: "Ah, vou só pagar essa conta de luz de casa com o dinheiro da venda de hoje, depois eu reponho". Ou o inverso: "Estou sem saldo na conta da empresa, vou pagar o fornecedor com meu cartão de crédito pessoal".</p>
-                <p>Pronto. A porta do caos foi aberta.</p>
-                
-                <h4>Por que isso destrói seu negócio?</h4>
-                <ul>
-                    <li><strong>Visão Turva (A Ilusão do Lucro ou Prejuízo):</strong> Se você paga o aluguel da sua casa (despesa PF) com o dinheiro da empresa (receita PJ), a sua empresa vai parecer menos lucrativa do que realmente é. Pior: se você usa seu salário de um emprego antigo (reserva PF) para comprar material para o MEI (custo PJ), seu negócio vai parecer mais lucrativo do que é. Você cria uma "empresa zumbi": um negócio que já quebrou, mas que está sendo mantido vivo artificialmente pelo seu dinheiro pessoal, e você nem percebe.</li>
-                    <li><strong>Risco Fiscal (Confusão Patrimonial):</strong> Para a Receita Federal, o CNPJ é uma entidade e o CPF é outra. Quando você mistura os dois de forma sistemática, você comete algo chamado "confusão patrimonial". Em uma fiscalização, isso pode levar a Receita a desconsiderar a separação e cobrar impostos da empresa em cima do seu patrimônio pessoal, ou vice-versa. Para o MEI, o risco imediato é na Declaração de Imposto de Renda Pessoa Física (IRPF). Você não sabe quanto distribuiu de lucro isento e quanto foi pró-labore. A mistura torna impossível justificar seus ganhos pessoais para o Leão.</li>
-                    <li><strong>Falta de Métricas (Morte da Estratégia):</strong> Se o dinheiro do supermercado está na mesma planilha que o dinheiro do fornecedor, como você vai calcular sua Margem de Lucro (veremos no Capítulo 5)? Como você saberá seu Ponto de Equilíbrio? A resposta é simples: você não vai. Você perdeu a capacidade de medir a saúde do seu negócio.</li>
-                </ul>
-                
-                <h4>A Regra de Ouro: "A empresa paga você, você não paga pela empresa."</h4>
-                <p>Grave esta frase: O seu CNPJ é o seu primeiro cliente.</p>
-                <p>O dinheiro que entra na sua empresa (na conta PJ) não é seu. É da empresa. A empresa, por sua vez, tem uma obrigação: pagar o seu "salário" de dono (o pró-labore).</p>
-                <p>O fluxo correto é:</p>
-                <ol>
-                    <li>A empresa vende e recebe o dinheiro na conta PJ.</li>
-                    <li>A empresa paga todas as suas próprias despesas (DAS, fornecedor, aluguel da sala comercial, internet do negócio) usando o dinheiro da conta PJ.</li>
-                    <li>Uma vez por mês, a empresa transfere um valor fixo (o seu pró-labore) da conta PJ para a sua conta PF.</li>
-                </ol>
-                <p>É com esse dinheiro, na sua conta PF, que você paga a luz de casa, o supermercado e a escola das crianças.</p>
-                <p>O que sobra na conta PJ depois de pagar tudo (incluindo seu pró-labore)? Isso se chama Lucro. E o lucro também é da empresa, para ser reinvestido ou distribuído ao dono depois.</p>
-                
-                <h3>🏦 A "Conta Dupla": A Necessidade Prática</h3>
-                <p>Para que a "Regra de Ouro" funcione, você precisa de um campo de futebol dividido. Você precisa de duas contas bancárias.</p>
-                <ul>
-                    <li><strong>Conta Corrente Pessoa Física (PF):</strong> Você já tem. É a sua conta pessoal, para sua vida.</li>
-                    <li><strong>Conta Corrente Pessoa Jurídica (PJ):</strong> A conta do seu CNPJ.</li>
-                </ul>
-                <p><strong>"Mas MEI é obrigado a ter conta PJ?"</strong></p>
-                <p>Legalmente, não. A lei não obriga o MEI a ter uma conta PJ.</p>
-                <p><strong>"Então por que ter?"</strong></p>
-                <p>Porque é praticamente impossível aplicar a separação sem ela. É como tentar separar água e óleo dentro do mesmo copo enquanto você o balança.</p>
-                <p>Ter uma conta PJ, hoje, é trivial. Diversos bancos digitais oferecem contas PJ gratuitas, sem taxa de manutenção, com transferências (Pix) ilimitadas e, muitas vezes, até com emissor de boletos. Não há desculpa.</p>
-                <p>O fluxo se torna simples:</p>
-                <ul>
-                    <li>Cliente pagou? O dinheiro cai na PJ.</li>
-                    <li>Precisa comprar matéria-prima? Pague com o cartão de débito da PJ.</li>
-                    <li>Chegou o dia do seu "salário"? Faça um Pix da PJ para a PF.</li>
-                </ul>
-                <p>Essa disciplina é o primeiro e mais importante pilar de todo o seu controle financeiro.</p>
-                
-                <h3>💰 Definindo seu Pró-labore: O "Salário" do Dono</h3>
-                <p>O Pró-labore (do latim, "pelo trabalho") é a remuneração, o "salário", que o sócio ou dono recebe pelo trabalho que executa na empresa. Note a palavra: <strong>executa</strong>.</p>
-                <p>Ele não é o lucro. O lucro é o prêmio pelo risco de empreender. O pró-labore é o pagamento pelo seu trabalho de padeiro, designer, motorista ou gerente.</p>
-                <p><strong>Por que ele é vital?</strong></p>
-                <p>Porque o pró-labore é um Custo Fixo da sua empresa. O seu negócio precisa ter dinheiro para pagar seu funcionário mais importante: você.</p>
-                <p>Se você não define um pró-labore e simplesmente "pega dinheiro quando precisa", você nunca saberá o custo real da sua operação. Sua empresa pode parecer lucrativa, mas só porque ela não está pagando o seu principal funcionário.</p>
-                
-                <h4>Como definir seu "salário" de dono?</h4>
-                <p>No começo, seja conservador. Não sangre a empresa antes que ela possa andar. Existem duas abordagens principais:</p>
-                <ol>
-                    <li><strong>Abordagem de Custo Pessoal (O Mínimo Viável):</strong>
-                        <p>Some todas as suas contas pessoais (aluguel, luz, água, mercado, internet, lazer). Exemplo: R$ 2.500,00. Esse é o valor mínimo que sua empresa precisa transferir para sua conta PF para você "sobreviver". Esse é o seu pró-labore inicial. O objetivo da empresa passa a ser: faturar o suficiente para pagar todos os custos (DAS, fornecedores, etc.) E TAMBÉM esses R$ 2.500,00.</p>
-                    </li>
-                    <li><strong>Abordagem de Mercado (O Valor Justo):</strong>
-                        <p>Quanto você pagaria para uma pessoa fazer exatamente o que você faz hoje na sua empresa? Se você é um MEI desenvolvedor, qual o salário júnior de um desenvolvedor? Se você é uma MEI confeiteira, qual o salário de uma boa confeiteira na sua região? Isso ajuda a evitar distorções. Muitos donos "acham" que merecem R$ 10.000 por mês, mas o trabalho que executam vale R$ 3.000 no mercado. Defina um valor de mercado como seu pró-labore.</p>
-                    </li>
-                </ol>
-                <p><strong>Recomendação:</strong> Comece com a Abordagem 1 (Mínimo Viável). Quando a empresa começar a gerar lucro consistentemente, você pode reajustar seu pró-labore, como se fosse um aumento de salário.</p>
-                <p>O pró-labore deve ser um valor fixo e pago em uma data fixa (ex: todo dia 5). Trate-se como um funcionário. Isso cria disciplina para você e previsibilidade para o caixa da sua empresa.</p>
-                
-                <hr>
-                
-                <h2>Capítulo 2: As Ferramentas do Controle (O Cinto de Utilidades)</h2>
-                <p>Com a mentalidade correta (Capítulo 1), precisamos agora das ferramentas para colocar a organização em prática. A melhor ferramenta de controle financeiro é aquela que você usa consistentemente. Não adianta ter o software mais caro e complexo se ele fica abandonado.</p>
-                <p><strong>A disciplina de registrar é mais importante que a plataforma de registro.</strong> Vamos analisar as opções, da mais simples à mais robusta.</p>
-                
-                <h3>🧰 Análise das Ferramentas Disponíveis</h3>
-                
-                <h4>1. O Caderno (Analógico)</h4>
-                <p>O bom e velho "livro-caixa" de capa preta ou o caderno de escola.</p>
-                <ul>
-                    <li><strong>Prós:</strong> Simplicidade (Não requer aprendizado técnico), Baixo Custo (Gratuito), Tátil.</li>
-                    <li><strong>Contras:</strong> Risco de Perda (fogo, água, sumiço), Erros Manuais (soma), Sem Automação, Retrabalho.</li>
-                    <li><strong>Veredito:</strong> Melhor que nada, mas extremamente arriscado e ineficiente.</li>
-                </ul>
-                
-                <h4>2. Planilhas (Excel / Google Sheets)</h4>
-                <p>Este é o ponto de equilíbrio ideal para 90% dos MEIs que estão começando. O Google Sheets (Planilhas Google) é particularmente poderoso por ser gratuito, salvar na nuvem (sem risco de perda) e ser acessível do celular ou computador.</p>
-                <ul>
-                    <li><strong>Prós:</strong> Automação de Baixo Custo (fórmulas), Personalização, Análise de Dados (filtros, gráficos), Gratuito e Seguro.</li>
-                    <li><strong>Contras:</strong> Requer Disciplina (alimentar a planilha), Curva de Aprendizado (básica), Risco de "Quebrar" (deletar fórmula).</li>
-                    <li><strong>Veredito:</strong> A ferramenta de entrada recomendada. Oferece o melhor balanço entre controle, poder de análise e custo.</li>
-                </ul>
-                
-                <h4>3. Aplicativos e Softwares de Gestão (SaaS)</h4>
-                <p>Aqui entramos no campo dos serviços pagos (embora muitos tenham versões gratuitas limitadas). Exemplos incluem Qipu, Conta Azul, Meu MEI, Controlle, entre outros.</p>
-                <ul>
-                    <li><strong>Prós:</strong> Automação Avançada (conciliação bancária), Interface Amigável, Relatórios Prontos, Funções Extras (Emissão de NF-e, DAS).</li>
-                    <li><strong>Contras:</strong> Custo (assinatura mensal), Engessamento (layout fixo), Complexidade Desnecessária (para alguns).</li>
-                    <li><strong>Quando vale a pena?</strong> Alto volume de transações, necessidade de emitir muitas NF-e, ou quando você gasta mais tempo na planilha do que no negócio.</li>
-                </ul>
+        // Formulários de Login/Cadastro
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const registerForm = document.getElementById('register-form');
+        const registerError = document.getElementById('register-error');
 
-                <h3>📊 O Modelo de Planilha Essencial</h3>
-                <p>Se você optou pela planilha (ótima escolha!), não precisa complicar. Uma planilha de Fluxo de Caixa Simples é tudo que você precisa para começar. Ela é, na verdade, um "Livro-Caixa" digital.</p>
-                <p>Quais colunas são indispensáveis?</p>
-                <ul>
-                    <li><strong>Data:</strong> (Ex: 08/11/2025) - Quando a transação aconteceu.</li>
-                    <li><strong>Descrição:</strong> (Ex: Venda Serviço Consultoria - Cliente X) - O que foi?</li>
-                    <li><strong>Categoria:</strong> (Ex: Receita-Serviço / Custo-Matéria Prima) - A mais importante para análise.</li>
-                    <li><strong>Tipo:</strong> (Ex: Entrada / Saída)</li>
-                    <li><strong>Valor:</strong> (Ex: R$ 500,00)</li>
-                    <li><strong>Conta:</strong> (Ex: Conta PJ / Caixa Físico) - Onde o dinheiro estava.</li>
-                    <li><strong>Status:</strong> (Ex: Pago / Pendente) - Essencial para gerenciar contas a pagar/receber.</li>
-                </ul>
-                
-                <h4>Por que a "Categoria" é a mágica?</h4>
-                <p>Porque é com ela que você vai responder perguntas estratégicas. Crie categorias-padrão. Por exemplo:</p>
-                <ul>
-                    <li><strong>Categorias de Entrada:</strong> Receita-Produto A, Receita-Produto B, Receita-Serviço.</li>
-                    <li><strong>Categorias de Saída (Custos Fixos):</strong> DAS, Aluguel, Internet, Pró-Labore, Software.</li>
-                    <li><strong>Categorias de Saída (Custos Variáveis):</strong> Matéria-Prima, Embalagem, Frete-Venda, Comissão-Marketplace.</li>
-                </ul>
-                
-                <h4>Demonstração de Uso (Exemplo de Planilha):</h4>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Descrição</th>
-                                <th>Categoria</th>
-                                <th>Tipo</th>
-                                <th>Valor</th>
-                                <th>Conta</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>01/11</td>
-                                <td>Saldo Inicial</td>
-                                <td>-</td>
-                                <td>Entrada</td>
-                                <td>R$ 500,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>03/11</td>
-                                <td>Venda Site - Cliente XPTO</td>
-                                <td>Receita-Serviço</td>
-                                <td>Entrada</td>
-                                <td>R$ 1.200,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>05/11</td>
-                                <td>Pagamento Pró-Labore</td>
-                                <td>Pró-Labore</td>
-                                <td>Saída</td>
-                                <td>R$ 800,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>06/11</td>
-                                <td>Compra Tecidos - Fornec. A</td>
-                                <td>Custo-Matéria Prima</td>
-                                <td>Saída</td>
-                                <td>R$ 350,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>07/11</td>
-                                <td>Venda Bolsa - Cliente B</td>
-                                <td>Receita-Produto A</td>
-                                <td>Entrada</td>
-                                <td>R$ 150,00</td>
-                                <td>Caixa Físico</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>08/11</td>
-                                <td>Pagamento DAS (Ref. Out)</td>
-                                <td>Imposto-DAS</td>
-                                <td>Saída</td>
-                                <td>R$ 72,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pago</td>
-                            </tr>
-                            <tr>
-                                <td>10/11</td>
-                                <td>Venda Consultoria - Cli. C</td>
-                                <td>Receita-Serviço</td>
-                                <td>Entrada</td>
-                                <td>R$ 400,00</td>
-                                <td>Conta PJ</td>
-                                <td>Pendente</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p class="mt-4">Com essa estrutura simples, no fim do mês você pode filtrar pela coluna "Categoria" e descobrir:</p>
-                <ul>
-                    <li>Quanto você faturou com "Receita-Serviço" (R$ 1.200 + R$ 400)?</li>
-                    <li>Quanto gastou de "Custo-Matéria Prima" (R$ 350)?</li>
-                    <li>Quanto tem a receber (Filtrar "Status" = Pendente) (R$ 400)?</li>
-                </ul>
-                <p><strong>Você acabou de criar a base para todo o seu controle financeiro.</strong></p>
-            `;
+        // Perfil Logado
+        const logoutBtn = document.getElementById('logout-btn');
+        const profileBtn = document.getElementById('profile-btn'); // NOVO
+        const profilePageContent = document.getElementById('profile-page-content'); // NOVO
+        const backToHomeFromProfile = document.getElementById('back-to-home-from-profile'); // NOVO
+        const profileName = document.getElementById('profile-name');
+        const profileEmail = document.getElementById('profile-email');
+        const profileSubscription = document.getElementById('profile-subscription');
+        const mainPageContent = document.getElementById('main-page-content');
 
-            // Conteúdo placeholder para outros cursos de texto
-            const placeholderContent = `
-                <h2>Conteúdo em Breve</h2>
-                <p>Este mini-curso está sendo cuidadosamente preparado por nossos especialistas.</p>
-                <p>Em breve, você terá acesso a um conteúdo incrível e direto ao ponto sobre este assunto.</p>
-                <p>Volte em alguns dias!</p>
-            `;
-
-            // URL do vídeo específico (Removida a de copywriting)
-            // const copywritingVideoUrl = "https://www.youtube.com/embed/PbA-a-W2-V8?autoplay=1&rel=0"; // Link antigo
-            
-            // NOVO: URL do Google Drive (convertida para /preview para funcionar no iframe)
-            const googleDriveVideoUrl = "https://drive.google.com/file/d/1i7xciP8_lJC0rMDi__gg4os0eGEyGTpU/preview";
+        // Modal e Assinatura
+        const subscribeModal = document.getElementById('subscribe-modal');
+        const modalContent = subscribeModal ? subscribeModal.querySelector('div') : null;
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalSubscribeLink = document.getElementById('modal-subscribe-link');
+        const subscriptionButtons = document.querySelectorAll('.subscription-button'); // Classe unificada
+        
+        // Stripe
+        // ⚠️ ATENÇÃO: Troque pela sua Chave Pública (Publishable Key) de TESTE
+        const stripe = Stripe('⚠️ COLE SUA CHAVE PÚBLICA DO STRIPE AQUI (pk_test_...)');
+        
+        // ✅ CORRIGIDO: Coloquei a URL real do seu backend Vercel
+        const backendUrl = 'https://synk-camp1.vercel.app';
 
 
-            // --- NOVAS Funções de Navegação ---
-            function hideAllPages() {
-                allPages.forEach(page => {
-                    if (page) {
-                        page.classList.add('hidden');
-                    }
-                });
+        // --- Listas de Conteúdo (Helpers) ---
+        const textCourses = ['Controle Financeiro para MEI', 'Como Investir do Zero', 'Criação de E-book PLR', 'Marketing de Influência'];
+        const videoCourses = ['Copywriting para Vendas Rápidas', 'Produtividade Hacker', 'Primeira Venda como Afiliado', 'Tráfego Pago para Iniciantes', 'Oratória para Empreendedores', 'SEO para Blog', 'Declaração de Imposto (MEI)', 'Gestão de Tempo Ágil'];
+        const premiumCategories = ['financas', 'renda-extra', 'des-pessoal'];
+        const premiumCategoriesPT = ['FINANÇAS', 'RENDA EXTRA', 'DES. PESSOAL'];
+        const meiGuideContent = `🏛️ Guia Mestre: O Controle Financeiro Definitivo para o MEI (Parte 1 de 3)Capítulo 1: A Mentalidade Financeira do MEI (O Alicerce)Abrir um MEI é um ato de coragem. É o primeiro passo para transformar uma ideia em um negócio, uma habilidade em uma fonte de renda, um sonho em um CNPJ. No entanto, o que separa os MEIs que prosperam daqueles que patinam e, eventualmente, desistem, raramente é a falta de talento técnico. O marceneiro pode ser brilhante, a confeiteira pode ter um produto divino, e o consultor pode ser um gênio. Onde, então, mora o perigo?A resposta, quase invariavelmente, está no controle financeiro.🧠 Por que o controle financeiro é o motor do seu negócio?Muitos empreendedores iniciantes enxergam o controle financeiro como uma tarefa burocrática, um "mal necessário" que se resume a "pagar contas". Eles o tratam como o freio do carro: algo que só usam quando o problema já apareceu.Essa visão é fundamentalmente equivocada. O controle financeiro não é o freio; é o motor e o painel de controle, tudo ao mesmo tempo.Não é sobre "pagar contas", é sobre ter poder de decisão.Imagine pilotar um carro em uma estrada desconhecida, à noite, sem faróis e sem painel. Você não sabe sua velocidade, não sabe quanto combustível tem, não sabe se o motor está superaquecendo. Você está apenas... reagindo ao que aparece imediatamente à sua frente. É assim que um MEI opera sem controle financeiro.Com um controle financeiro eficaz, você sai do modo "reação" e entra no modo "estratégia". O objetivo muda de "será que consigo pagar o DAS esse mês?" para:Estratégia: "Qual produto me dá a maior margem de lucro? Devo focar minhas vendas nele?"Crescimento: "Pelos meus registros, meus custos fixos estão cobertos. Quanto posso reinvestir em marketing para atrair mais clientes?"Liberdade: "Eu sei exatamente quanto meu negócio lucra. Posso me dar ao luxo de tirar uma semana de férias em março, pois meu fluxo de caixa projetado permite isso."O controle financeiro transforma a ansiedade (o desconhecido) em confiança (dados). Ele é a ferramenta que permite que você, o dono, realmente dirija o negócio, em vez de ser levado por ele.🚨 O Erro Fatal #1: Misturar Finanças Pessoais (PF) e Empresariais (PJ)Este é, sem sombra de dúvida, o erro mais comum e mais destrutivo que um MEI pode cometer. É o "pecado original" do microempreendedor.Começa de forma inocente: "Ah, vou só pagar essa conta de luz de casa com o dinheiro da venda de hoje, depois eu reponho". Ou o inverso: "Estou sem saldo na conta da empresa, vou pagar o fornecedor com meu cartão de crédito pessoal".Pronto. A porta do caos foi aberta.Por que isso destrói seu negócio?Visão Turva (A Ilusão do Lucro ou Prejuízo): Se você paga o aluguel da sua casa (despesa PF) com o dinheiro da empresa (receita PJ), a sua empresa vai parecer menos lucrativa do que realmente é. Pior: se você usa seu salário de um emprego antigo (reserva PF) para comprar material para o MEI (custo PJ), seu negócio vai parecer mais lucrativo do que é. Você cria uma "empresa zumbi": um negócio que já quebrou, mas que está sendo mantido vivo artificialmente pelo seu dinheiro pessoal, e você nem percebe.Risco Fiscal (Confusão Patrimonial): Para a Receita Federal, o CNPJ é uma entidade e o CPF é outra. Quando você mistura os dois de forma sistemática, você comete algo chamado "confusão patrimonial". Em uma fiscalização, isso pode levar a Receita a desconsiderar a separação e cobrar impostos da empresa em cima do seu patrimônio pessoal, ou vice-versa. Para o MEI, o risco imediato é na Declaração de Imposto de Renda Pessoa Física (IRPF). Você não sabe quanto distribuiu de lucro isento e quanto foi pró-labore. A mistura torna impossível justificar seus ganhos pessoais para o Leão.Falta de Métricas (Morte da Estratégia): Se o dinheiro do supermercado está na mesma planilha que o dinheiro do fornecedor, como você vai calcular sua Margem de Lucro (veremos no Capítulo 5)? Como você saberá seu Ponto de Equilíbrio? A resposta é simples: você não vai. Você perdeu a capacidade de medir a saúde do seu negócio.A Regra de Ouro: "A empresa paga você, você não paga pela empresa."Grave esta frase: O seu CNPJ é o seu primeiro cliente.O dinheiro que entra na sua empresa (na conta PJ) não é seu. É da empresa. A empresa, por sua vez, tem uma obrigação: pagar o seu "salário" de dono (o pró-labore).O fluxo correto é:A empresa vende e recebe o dinheiro na conta PJ.A empresa paga todas as suas próprias despesas (DAS, fornecedor, aluguel da sala comercial, internet do negócio) usando o dinheiro da conta PJ.Uma vez por mês, a empresa transfere um valor fixo (o seu pró-labore) da conta PJ para a sua conta PF.É com esse dinheiro, na sua conta PF, que você paga a luz de casa, o supermercado e a escola das crianças.O que sobra na conta PJ depois de pagar tudo (incluindo seu pró-labore)? Isso se chama Lucro. E o lucro também é da empresa, para ser reinvestido ou distribuído ao dono depois.🏦 A "Conta Dupla": A Necessidade PráticaPara que a "Regra de Ouro" funcione, você precisa de um campo de futebol dividido. Você precisa de duas contas bancárias.Conta Corrente Pessoa Física (PF): Você já tem. É a sua conta pessoal, para sua vida.Conta Corrente Pessoa Jurídica (PJ): A conta do seu CNPJ."Mas MEI é obrigado a ter conta PJ?"Legalmente, não. A lei não obriga o MEI a ter uma conta PJ."Então por que ter?"Porque é praticamente impossível aplicar a separação sem ela. É como tentar separar água e óleo dentro do mesmo copo enquanto você o balança.Ter uma conta PJ, hoje, é trivial. Diversos bancos digitais oferecem contas PJ gratuitas, sem taxa de manutenção, com transferências (Pix) ilimitadas e, muitas vezes, até com emissor de boletos. Não há desculpa.O fluxo se torna simples:Cliente pagou? O dinheiro cai na PJ.Precisa comprar matéria-prima? Pague com o cartão de débito da PJ.Chegou o dia do seu "salário"? Faça um Pix da PJ para a PF.Essa disciplina é o primeiro e mais importante pilar de todo o seu controle financeiro.💰 Definindo seu Pró-labore: O "Salário" do DonoO Pró-labore (do latim, "pelo trabalho") é a remuneração, o "salário", que o sócio ou dono recebe pelo trabalho que executa na empresa. Note a palavra: executa.Ele não é o lucro. O lucro é o prêmio pelo risco de empreender. O pró-labore é o pagamento pelo seu trabalho de padeiro, designer, motorista ou gerente.Por que ele é vital?Porque o pró-labore é um Custo Fixo da sua empresa. O seu negócio precisa ter dinheiro para pagar seu funcionário mais importante: você.Se você não define um pró-labore e simplesmente "pega dinheiro quando precisa", você nunca saberá o custo real da sua operação. Sua empresa pode parecer lucrativa, mas só porque ela não está pagando o seu principal funcionário.Como definir seu "salário" de dono?No começo, seja conservador. Não sangre a empresa antes que ela possa andar. Existem duas abordagens principais:Abordagem de Custo Pessoal (O Mínimo Viável):Some todas as suas contas pessoais (aluguel, luz, água, mercado, internet, lazer).Exemplo: R$ 2.500,00.Esse é o valor mínimo que sua empresa precisa transferir para sua conta PF para você "sobreviver". Esse é o seu pró-labore inicial.O objetivo da empresa passa a ser: faturar o suficiente para pagar todos os custos (DAS, fornecedores, etc.) E TAMBÉM esses R$ 2.500,00.Abordagem de Mercado (O Valor Justo):Quanto você pagaria para uma pessoa fazer exatamente o que você faz hoje na sua empresa?Se você é um MEI desenvolvedor, qual o salário júnior de um desenvolvedor? Se você é uma MEI confeiteira, qual o salário de uma boa confeiteira na sua região?Isso ajuda a evitar distorções. Muitos donos "acham" que merecem R$ 10.000 por mês, mas o trabalho que executam vale R$ 3.000 no mercado.Defina um valor de mercado como seu pró-labore.Recomendação: Comece com a Abordagem 1 (Mínimo Viável). Quando a empresa começar a gerar lucro consistentemente, você pode reajustar seu pró-labore, como se fosse um aumento de salário.O pró-labore deve ser um valor fixo e pago em uma data fixa (ex: todo dia 5). Trate-se como um funcionário. Isso cria disciplina para você e previsibilidade para o caixa da sua empresa.Capítulo 2: As Ferramentas do Controle (O Cinto de Utilidades)Com a mentalidade correta (Capítulo 1), precisamos agora das ferramentas para colocar a organização em prática. A melhor ferramenta de controle financeiro é aquela que você usa consistentemente. Não adianta ter o software mais caro e complexo se ele fica abandonado.A disciplina de registrar é mais importante que a plataforma de registro. Vamos analisar as opções, da mais simples à mais robusta.🧰 Análise das Ferramentas Disponíveis1. O Caderno (Analógico)O bom e velho "livro-caixa" de capa preta ou o caderno de escola.Prós:Simplicidade: Não requer aprendizado técnico. Basta caneta e papel.Baixo Custo: Praticamente gratuito.Tátil: Algumas pessoas se sentem mais seguras e "no controle" ao escrever fisicamente.Contras:Risco de Perda: É um ponto único de falha. Se o caderno molhar, pegar fogo, for perdido ou se o cachorro comer, sua gestão financeira inteira desaparece.Erros Manuais: Erros de soma são extremamente comuns e difíceis de auditar. Um "0" a mais ou a menos pode distorcer toda a sua visão.Sem Automação: Quer saber quanto gastou com "Matéria-Prima" no mês? Você terá que folhear o caderno inteiro, página por página, somando na calculadora.Retrabalho: É impossível gerar relatórios, gráficos ou fazer projeções. Você terá que passar os dados para outro lugar (uma planilha, por exemplo) para analisá-los, o que é um trabalho dobrado.Veredito: Melhor que nada, mas extremamente arriscado e ineficiente. Só é recomendado em locais sem acesso algum a um computador ou smartphone.2. Planilhas (Excel / Google Sheets)Este é o ponto de equilíbrio ideal para 90% dos MEIs que estão começando. O Google Sheets (Planilhas Google) é particularmente poderoso por ser gratuito, salvar na nuvem (sem risco de perda) e ser acessível do celular ou computador.Prós:Automação de Baixo Custo: Fórmulas simples (SOMA, MÉDIA) eliminam erros de cálculo.Personalização: Você cria as colunas e categorias que fazem sentido para o seu negócio.Análise de Dados: É fácil filtrar por "Categoria", criar tabelas dinâmicas e gerar gráficos simples para ver "para onde vai o dinheiro".Gratuito e Seguro: O Google Sheets é 100% gratuito e está salvo na sua conta Google.Contras:Requer Disciplina: A planilha não vai te mandar uma notificação. Você precisa ter a disciplina de abri-la (idealmente, todo dia) e alimentá-la.Curva de Aprendizado: Embora básica, existe uma pequena curva de aprendizado para criar as primeiras fórmulas.Risco de "Quebrar": É fácil deletar uma fórmula sem querer e bagunçar os cálculos. (Dica: pinte as células com fórmulas de uma cor diferente para não digitar nelas).Veredito: A ferramenta de entrada recomendada. Oferece o melhor balanço entre controle, poder de análise e custo.3. Aplicativos e Softwares de Gestão (SaaS)Aqui entramos no campo dos serviços pagos (embora muitos tenham versões gratuitas limitadas). Exemplos incluem Qipu, Conta Azul, Meu MEI, Controlle, entre outros.Prós:Automação Avançada: Muitos se conectam à sua conta PJ e "puxam" os lançamentos do extrato bancário automaticamente (conciliação bancária).Interface Amigável: São desenhados para serem fáceis, guiando o usuário no que precisa ser feito.Relatórios Prontos: Geram relatórios de Fluxo de Caixa, DRE (Demonstrativo de Resultado) e outros com um clique.Funções Extras: Muitos já emitem Nota Fiscal (NF-e) e geram a guia do DAS, unificando toda a gestão em um só lugar.Contras:Custo: Geralmente é uma assinatura mensal. Embora baixo (R$ 30 a R$ 100), é um novo Custo Fixo para a empresa.Engessamento: Você fica "preso" ao layout e às categorias do software. Se você tem um modelo de negócio muito específico, pode ser difícil adaptá-lo.Complexidade Desnecessária: Alguns podem ser "grandes demais" para um MEI que apenas presta um serviço por mês e só quer pagar seu DAS.Quando vale a pena?Quando você tem um volume alto de transações (ex: um e-commerce MEI com 30 vendas por dia).Quando você precisa emitir muitas Notas Fiscais.Quando você sente que está passando mais tempo gerenciando a planilha do que tocando o negócio. Esse é o sinal de que é hora de fazer um upgrade.📊 O Modelo de Planilha EssencialSe você optou pela planilha (ótima escolha!), não precisa complicar. Uma planilha de Fluxo de Caixa Simples é tudo que você precisa para começar. Ela é, na verdade, um "Livro-Caixa" digital.Quais colunas são indispensáveis?Abra um Google Sheets e crie as seguintes colunas:Data: (Ex: 08/11/2025) - Quando a transação aconteceu.Descrição: (Ex: Venda Serviço Consultoria - Cliente X / Compra de Farinha - Fornecedor Y) - O que foi? Seja claro.Categoria: (Ex: Receita-Serviço / Custo-Matéria Prima) - Esta é a coluna mais importante para análise.Tipo: (Ex: Entrada / Saída) - Para facilitar filtros.Valor: (Ex: R$ 500,00 / R$ 80,00) - O montante da transação.Conta: (Ex: Conta PJ / Caixa Físico) - Onde o dinheiro estava.Status: (Ex: Pago / Pendente) - Essencial para gerenciar contas a pagar/receber (veremos no Cap. 3).Por que a "Categoria" é a mágica?Porque é com ela que você vai responder perguntas estratégicas. Crie categorias-padrão. Por exemplo:Categorias de Entrada: Receita-Produto A, Receita-Produto B, Receita-Serviço.Categorias de Saída (Custos Fixos): DAS, Aluguel, Internet, Pró-Labore, Software.Categorias de Saída (Custos Variáveis): Matéria-Prima, Embalagem, Frete-Venda, Comissão-Marketplace.Demonstração de Uso (Exemplo de Planilha):DataDescriçãoCategoriaTipoValorContaStatus01/11Saldo Inicial-EntradaR$ 500,00Conta PJPago03/11Venda Site - Cliente XPTOReceita-ServiçoEntradaR$ 1.200,00Conta PJPago05/11Pagamento Pró-LaborePró-LaboreSaídaR$ 800,00Conta PJPago06/11Compra Tecidos - Fornec. ACusto-Matéria PrimaSaídaR$ 350,00Conta PJPago07/11Venda Bolsa - Cliente BReceita-Produto AEntradaR$ 150,00Caixa FísicoPago08/11Pagamento DAS (Ref. Out)Imposto-DASSaídaR$ 72,00Conta PJPago10/11Venda Consultoria - Cli. CReceita-ServiçoEntradaR$ 400,00Conta PJPendenteCom essa estrutura simples, no fim do mês você pode filtrar pela coluna "Categoria" e descobrir:Quanto você faturou com "Receita-Serviço" (R$ 1.200 + R$ 400)?Quanto gastou de "Custo-Matéria Prima" (R$ 350)?Quanto tem a receber (Filtrar "Status" = Pendente) (R$ 400)?Você acabou de criar a base para todo o seu controle financeiro.`;
+        const placeholderContent = `<h2>Conteúdo em Breve</h2><p>Este mini-curso está sendo preparado com muito carinho e estará disponível em breve para assinantes.</p>`;
+        const googleDriveVideoUrl = "https://drive.google.com/file/d/1i7xciP8_lJC0rMDi__gg4os0eGEyGTpU/preview";
+
+
+        // --- Funções Principais de Navegação e UI ---
+
+        function hideAllPages() {
+            allPages.forEach(page => page && page.classList.add('hidden'));
+        }
+
+        function showPage(pageToShow) {
+            hideAllPages();
+            if (pageToShow) {
+                pageToShow.classList.remove('hidden');
             }
+            window.scrollTo(0, 0); 
+        }
 
-            function showPage(pageToShow) {
-                hideAllPages();
-                if (pageToShow) {
-                    pageToShow.classList.remove('hidden');
-                }
-                window.scrollTo(0, 0); // Rola para o topo ao trocar de página
-            }
-
-            // --- NOVAS Funções de Modal ---
-            function showSubscriptionModal() {
-                if (!subscribeModal || !modalContent) return;
-                subscribeModal.classList.remove('hidden');
-                // Força um reflow para a animação de entrada funcionar
-                setTimeout(() => {
-                    subscribeModal.style.opacity = 1;
+        function showSubscriptionModal() {
+            if (!subscribeModal || !modalContent) return;
+            subscribeModal.classList.remove('hidden');
+            setTimeout(() => {
+                if(subscribeModal) subscribeModal.style.opacity = 1;
+                if(modalContent) {
                     modalContent.style.opacity = 1;
                     modalContent.style.transform = 'scale(1)';
-                }, 10);
-            }
-
-            function hideSubscriptionModal() {
-                if (!subscribeModal || !modalContent) return;
-                modalContent.style.opacity = 0;
-                modalContent.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    subscribeModal.classList.add('hidden');
-                    subscribeModal.style.opacity = 0; // Reseta para a próxima abertura
-                }, 300); // Tempo da animação
-            }
-
-
-            // NOVO: Atualiza a UI baseada no estado de login
-            function updateUIforLoginState() {
-                if (isLoggedIn) {
-                    if (loggedInNav) loggedInNav.classList.remove('hidden');
-                    if (loggedOutNav) loggedOutNav.classList.add('hidden');
-                } else {
-                    if (loggedInNav) loggedInNav.classList.add('hidden');
-                    if (loggedOutNav) loggedOutNav.classList.remove('hidden');
                 }
-                // Re-aplica o filtro atual para mostrar/esconder cursos de marketing
-                handleFilterClick(currentFilter);
+            }, 10);
+        }
+
+        function hideSubscriptionModal() {
+            if (!subscribeModal || !modalContent) return;
+            modalContent.style.opacity = 0;
+            modalContent.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                subscribeModal.classList.add('hidden');
+                subscribeModal.style.opacity = 0; 
+            }, 300);
+        }
+
+        // NOVO: Funções de UI de Login
+        function updateUIforLogin(user, profile) {
+            if (loggedInNav) loggedInNav.classList.remove('hidden');
+            if (loggedOutNav) loggedOutNav.classList.add('hidden');
+
+            currentUser = user; // Armazena o usuário autenticado
+            userProfile = profile; // Armazena o perfil do Firestore
+
+            // Atualiza o perfil se a página estiver aberta
+            if (profilePageContent && !profilePageContent.classList.contains('hidden')) {
+                updateProfilePage(user, profile);
             }
 
+            // Re-aplica os filtros de curso com base na assinatura
+            handleFilterClick(currentFilter);
+        }
 
-            // --- Lógica de Filtro (com verificação de nulidade) ---
-            if (filterContainer) {
-                filterContainer.addEventListener('click', (e) => {
-                    const target = e.target;
-                    if (target.tagName !== 'BUTTON') return;
+        function updateUIforLogout() {
+            if (loggedInNav) loggedInNav.classList.add('hidden');
+            if (loggedOutNav) loggedOutNav.classList.remove('hidden');
 
-                    // Remove a classe 'ativa' de todos
-                    filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
-                        btn.classList.remove('bg-brand-orange', 'text-white');
-                        btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
-                    });
-                    
-                    // Adiciona a classe 'ativa' ao clicado
-                    target.classList.add('bg-brand-orange', 'text-white');
-                    target.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            currentUser = null;
+            userProfile = null;
 
-                    currentFilter = target.dataset.filter;
-                    
-                    // Aplicar o filtro
-                    handleFilterClick(currentFilter);
-                });
-            }
+            // Re-aplica os filtros (agora como deslogado)
+            handleFilterClick(currentFilter);
+            // Garante que o usuário volte para a home
+            showPage(mainPageContent);
+        }
 
-            // --- Lógica de Carregar Mais (com verificação de nulidade) ---
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', () => {
-                    handleLoadMoreClick();
-                });
-            }
-
-            function updateLoadMoreButton() {
-                // Encontrar os cursos que estão escondidos E pertencem ao filtro atual
-                const hiddenCoursesInFilter = allCourses.filter(course => {
-                    const category = course.dataset.category;
-                    const isMarketing = category === 'marketing';
-                    const isPremium = premiumCategories.includes(category); // NOVO
-                    const matchesFilter = (currentFilter === 'all' || category === currentFilter);
-                    const isHidden = course.classList.contains('hidden');
-                    const isInitiallyHidden = course.classList.contains('initially-hidden');
-                    
-                    // NOVO: Não conte cursos de marketing se estiver deslogado
-                    if (isMarketing && !isLoggedIn) return false;
-                    // NOVO: Não conte cursos premium se não for assinante
-                    if (isPremium && !isSubscribed) return false;
-
-                    // Queremos contar os que estão 'initially-hidden' E 'hidden' E batem com o filtro
-                    return matchesFilter && isHidden && isInitiallyHidden;
-                });
-                
-                // Se não houver mais cursos escondidos nesse filtro, esconde o botão
-                if (loadMoreContainer) {
-                    if (hiddenCoursesInFilter.length === 0) {
-                        loadMoreContainer.classList.add('hidden');
+        // NOVO: Função que preenche a página de perfil
+        function updateProfilePage(user, profile) {
+            if (user && profile) {
+                if (profileName) profileName.innerText = profile.nome || 'Não definido';
+                if (profileEmail) profileEmail.innerText = user.email;
+                if (profileSubscription) {
+                    if (profile.subscriptionStatus === 'premium') {
+                        profileSubscription.innerText = 'Premium (Ativa)';
+                        profileSubscription.className = 'text-lg font-semibold text-green-600';
                     } else {
-                        loadMoreContainer.classList.remove('hidden');
+                        profileSubscription.innerText = 'Gratuita';
+                        profileSubscription.className = 'text-lg font-semibold text-brand-dark';
                     }
                 }
             }
-
-            function handleFilterClick(filter) {
-                let visibleCount = 0;
-                const maxVisible = 9;
-
-                allCourses.forEach(course => {
-                    const category = course.dataset.category;
-                    const isInitiallyHidden = course.classList.contains('initially-hidden');
-                    const isMarketing = category === 'marketing';
-                    const isPremium = premiumCategories.includes(category); // NOVO
-                    const matchesFilter = (filter === 'all' || category === filter);
-                    
-                    // LÓGICA ATUALIZADA:
-                    // 1. Esconde se for marketing E usuário não logado
-                    if (isMarketing && !isLoggedIn) {
-                        course.classList.add('hidden');
-                    
-                    // 2. NOVO: Esconde se for premium E usuário não assinante
-                    } else if (isPremium && !isSubscribed) {
-                        course.classList.add('hidden');
-
-                    // 3. Esconde se não bater com o filtro
-                    } else if (!matchesFilter) {
-                        course.classList.add('hidden');
-
-                    // 4. Bate com o filtro E tem permissão
-                    } else {
-                        // Se for 'initially-hidden', mantenha escondido por enquanto
-                        if (isInitiallyHidden) {
-                            course.classList.add('hidden');
-                        } else {
-                            // Se não for 'initially-hidden', mostre
-                            course.classList.remove('hidden');
-                            visibleCount++; // Conta apenas os 9 primeiros
-                        }
-                    }
-                });
-                
-                // Esconde o botão "Carregar Mais" se não houver mais nada para carregar
-                updateLoadMoreButton();
-            }
-
-            function handleLoadMoreClick() {
-                // Encontra os próximos cursos escondidos que batem com o filtro
-                const hiddenCoursesToShow = allCourses.filter(course => {
-                    const category = course.dataset.category;
-                    const isMarketing = category === 'marketing';
-                    const isPremium = premiumCategories.includes(category); // NOVO
-                    const matchesFilter = (currentFilter === 'all' || category === currentFilter);
-                    const isHidden = course.classList.contains('hidden');
-                    const isInitiallyHidden = course.classList.contains('initially-hidden');
-                    
-                    // NOVO: Não mostre marketing se deslogado
-                    if (isMarketing && !isLoggedIn) return false;
-                    // NOVO: Não mostre premium se não for assinante
-                    if (isPremium && !isSubscribed) return false;
-
-                    return matchesFilter && isHidden && isInitiallyHidden;
-                });
-
-                // Mostra os próximos 3 (ou menos)
-                const coursesToShow = hiddenCoursesToShow.slice(0, 3);
-                coursesToShow.forEach(course => {
-                    course.classList.remove('hidden');
-                });
-                
-                // Atualiza o botão (esconde se não houver mais)
-                updateLoadMoreButton();
-            }
-
-            // Chamada inicial para o estado "Todos"
-            // ATUALIZADO: A chamada agora é 'updateUIforLoginState' que chama o 'handleFilterClick'
-            // updateLoadMoreButton(); // Chamada antiga
+        }
 
 
-            // --- Lógica de Navegação de Página (ATUALIZADA) ---
+        // --- Funções de Lógica de Curso (Filtro, Carregar Mais) ---
 
-            // 1. Clicar em "Ver curso"
-            if (courseLinks.length > 0) {
-                courseLinks.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        
-                        // Encontra o card "pai"
-                        const courseCard = link.closest('.course-item');
-                        if (!courseCard) return;
-
-                        // Coleta os dados do card
-                        const categoryEl = courseCard.querySelector('.text-sm');
-                        const category = categoryEl ? categoryEl.innerText.toUpperCase() : '';
-                        const title = courseCard.querySelector('h3').innerText;
-                        const description = courseCard.querySelector('p').innerText;
-                        const imageSrc = courseCard.querySelector('img').src;
-                        
-                        // Coleta os detalhes (professor, tipo, duração)
-                        const detailsHtml = courseCard.querySelectorAll('.space-y-2 .flex');
-                        
-                        // --- NOVO: Verificação de Assinatura ---
-                        const isPremium = premiumCategoriesPT.includes(category);
-                        if (isPremium && !isSubscribed) {
-                            e.preventDefault();
-                            showSubscriptionModal();
-                            return; // Para a execução aqui
-                        }
-                        
-                        // --- Se tiver permissão, continua ---
-
-                        // Preenche a página do curso
-                        if (document.getElementById('course-page-category')) {
-                            document.getElementById('course-page-category').innerText = category;
-                        }
-                        if (document.getElementById('course-page-title')) {
-                            document.getElementById('course-page-title').innerText = title;
-                        }
-                        if (document.getElementById('course-page-description')) {
-                            document.getElementById('course-page-description').innerText = description;
-                        }
-                        if (document.getElementById('course-page-image')) {
-                            document.getElementById('course-page-image').src = imageSrc;
-                        }
-                        
-                        // Preenche os detalhes na lateral
-                        const profEl = document.getElementById('course-page-prof');
-                        const typeEl = document.getElementById('course-page-type');
-                        const durationEl = document.getElementById('course-page-duration');
-
-                        if (profEl && detailsHtml[0]) profEl.innerHTML = detailsHtml[0].innerHTML;
-                        if (typeEl && detailsHtml[1]) typeEl.innerHTML = detailsHtml[1].innerHTML;
-                        if (durationEl && detailsHtml[2]) durationEl.innerHTML = detailsHtml[2].innerHTML;
-                        
-                        // Troca as "páginas"
-                        showPage(coursePageContent);
-                    });
-                });
-            }
-
-            // 2. Voltar da INTRO para a HOME
-            if (backToCoursesBtn) {
-                backToCoursesBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(mainPageContent);
-                });
-            }
-
-            // 3. Ir da INTRO para a AULA (Player ou Texto)
-            if (startCourseBtn) {
-                startCourseBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Verifica se é o curso certo
-                    const currentTitle = document.getElementById('course-page-title')?.innerText;
-                    
-                    if (videoCourses.includes(currentTitle)) {
-                        // LÓGICA DO VÍDEO (AGORA PARA TODOS OS VÍDEOS)
-                        if (youtubePlayer) {
-                            // Carrega o player do Google Drive
-                            youtubePlayer.src = googleDriveVideoUrl; 
-                        }
-                        if (coursePageContent) coursePageContent.classList.add('hidden');
-                        if (lessonPlayerContent) lessonPlayerContent.classList.remove('hidden');
-                        
-                        // Atualiza o título da aula (pode ser genérico ou dinâmico)
-                        if (document.getElementById('lesson-title')) {
-                            document.getElementById('lesson-title').innerText = `Aula 1: ${currentTitle}`;
-                        }
-                        
-                        window.scrollTo(0, 0);
-                        
-                    } else if (textCourses.includes(currentTitle)) {
-                        // NOVA LÓGICA DE AULA EM TEXTO
-                        if (textLessonTitle) {
-                            // Define o título da página de aula
-                            if (currentTitle === 'Controle Financeiro para MEI') {
-                                textLessonTitle.innerText = '🏛️ Guia Mestre: O Controle Financeiro Definitivo (1/3)';
-                            } else {
-                                textLessonTitle.innerText = currentTitle;
-                            }
-                        }
-                        
-                        if (textLessonBody) {
-                            // Define o conteúdo da aula
-                            if (currentTitle === 'Controle Financeiro para MEI') {
-                                textLessonBody.innerHTML = meiGuideContent;
-                            } else {
-                                textLessonBody.innerHTML = placeholderContent;
-                            }
-                        }
-                        
-                        // Troca as "páginas"
-                        // CORREÇÃO DE BUG: Estava mostrando lessonPlayerContent em vez de textLessonContent
-                        showPage(textLessonContent);
-
-                    // REMOÇÃO DO BLOCO 'else if' DUPLICADO E CORRUPTO
-                    // } else if (textCourses.includes(currentTitle)) {
-                    //    } 
-                    //    
-                    //    // Troca as "páginas"
-                    //    showPage(textLessonContent);
-
-                    } else {
-                        // Se não for o curso de copy, não faz nada (ou mostra um aviso)
-                        console.warn('Vídeo/Texto para este curso ainda não configurado.');
-                        // Você pode adicionar uma UI de "em breve" aqui
-                    }
-                });
-            }
-
-            // 4. Voltar da AULA (Player) para a INTRO
-            if (backToIntroBtn) {
-                backToIntroBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Para o vídeo!
-                    if (youtubePlayer) {
-                        youtubePlayer.src = ""; // Limpa o src para parar o vídeo
-                    }
-                    
-                    // Troca as "páginas"
-                    showPage(coursePageContent);
-                });
-            }
+        function updateLoadMoreButton() {
+            // Verifica se o usuário é assinante
+            const isSubscribed = userProfile?.subscriptionStatus === 'premium';
             
-            // 5. NOVO: Voltar da AULA (Texto) para a INTRO
-            if (backToIntroFromTextBtn) {
-                backToIntroFromTextBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Troca as "páginas" de volta
-                    showPage(coursePageContent);
-                    
-                    // Limpa o conteúdo para não sobrecarregar
-                    if (textLessonBody) textLessonBody.innerHTML = "";
-                });
+            const hiddenCoursesInFilter = allCourses.filter(course => {
+                if (!course) return false;
+                const category = course.dataset.category;
+                const isMarketing = category === 'marketing';
+                const isPremium = premiumCategories.includes(category);
+                const matchesFilter = (currentFilter === 'all' || category === currentFilter);
+                const isHidden = course.classList.contains('hidden');
+                const isInitiallyHidden = course.classList.contains('initially-hidden');
+                
+                // Não conte cursos de marketing se estiver deslogado
+                if (isMarketing && !currentUser) return false;
+                // Não conte cursos premium se não for assinante
+                if (isPremium && !isSubscribed) return false;
+
+                return matchesFilter && isHidden && isInitiallyHidden;
+            });
+            
+            if (loadMoreContainer) {
+                loadMoreContainer.classList.toggle('hidden', hiddenCoursesInFilter.length === 0);
             }
+        }
 
-            // --- NOVOS Event Listeners para Login/Cadastro ---
+        function handleFilterClick(filter) {
+            currentFilter = filter; // Atualiza o filtro global
+            const isSubscribed = userProfile?.subscriptionStatus === 'premium';
+            
+            allCourses.forEach(course => {
+                if (!course) return;
+                const category = course.dataset.category;
+                const isInitiallyHidden = course.classList.contains('initially-hidden');
+                const isMarketing = category === 'marketing';
+                const isPremium = premiumCategories.includes(category);
+                const matchesFilter = (filter === 'all' || category === filter);
+                
+                let showCourse = true;
 
-            // 6. Clicar em "Entrar" no Header
-            if (loginBtn) {
-                loginBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(loginPageContent);
-                });
-            }
+                // Regra 1: Marketing
+                if (isMarketing && !currentUser) {
+                    showCourse = false;
+                }
+                // Regra 2: Premium
+                else if (isPremium && !isSubscribed) {
+                    showCourse = false;
+                }
+                // Regra 3: Filtro de Categoria
+                else if (!matchesFilter) {
+                    showCourse = false;
+                }
+                // Regra 4: Carregar Mais (se for 'initially-hidden', esconde)
+                else if (isInitiallyHidden) {
+                    showCourse = false;
+                }
 
-            // 7. Clicar em "Assinar Agora" no Header
-            if (signupBtn) {
-                signupBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(registerPageContent);
-                });
-            }
+                course.classList.toggle('hidden', !showCourse);
+            });
+            
+            updateLoadMoreButton();
+        }
 
-            // 8. Clicar em "Cadastre-se aqui" (no form de login)
-            if (showRegisterLink) {
-                showRegisterLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(registerPageContent);
-                });
-            }
+        function handleLoadMoreClick() {
+            const isSubscribed = userProfile?.subscriptionStatus === 'premium';
 
-            // 9. Clicar em "Faça login" (no form de cadastro)
-            if (showLoginLink) {
-                showLoginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(loginPageContent);
-                });
-            }
+            const hiddenCoursesToShow = allCourses.filter(course => {
+                if (!course) return false;
+                const category = course.dataset.category;
+                const isMarketing = category === 'marketing';
+                const isPremium = premiumCategories.includes(category);
+                const matchesFilter = (currentFilter === 'all' || category === currentFilter);
+                const isHidden = course.classList.contains('hidden');
+                const isInitiallyHidden = course.classList.contains('initially-hidden');
+                
+                if (isMarketing && !currentUser) return false;
+                if (isPremium && !isSubscribed) return false;
 
-            // 10. Voltar para Home (do Login)
-            if (backToHomeFromLogin) {
-                backToHomeFromLogin.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(mainPageContent);
-                });
-            }
+                return matchesFilter && isHidden && isInitiallyHidden;
+            });
 
-            // 11. Voltar para Home (do Cadastro)
-            if (backToHomeFromRegister) {
-                backToHomeFromRegister.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showPage(mainPageContent);
-                });
-            }
+            const coursesToShow = hiddenCoursesToShow.slice(0, 3);
+            coursesToShow.forEach(course => {
+                if(course) {
+                    course.classList.remove('hidden');
+                    course.classList.remove('initially-hidden'); // Importante para não ser escondido de novo
+                }
+            });
+            
+            updateLoadMoreButton();
+        }
 
-            // --- NOVOS Event Handlers para Simular Login/Logout ---
 
-            // 12. Clicar no botão "Entrar" do formulário de login
-            if (loginSubmitBtn) {
-                loginSubmitBtn.addEventListener('click', (e) => {
-                    e.preventDefault(); // Impede o envio real do formulário
-                    
-                    // Simula o login
-                    isLoggedIn = true;
-                    
-                    // Atualiza a UI (Header e Cursos)
-                    updateUIforLoginState();
-                    
-                    // Envia o usuário para a home (agora logado)
-                    showPage(mainPageContent);
-                });
-            }
+        // --- Event Listeners ---
 
-            // 13. Clicar no botão "Sair" do header
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Simula o logout
-                    isLoggedIn = false;
-                    isSubscribed = false; // NOVO: Reseta a assinatura
-                    
-                    // Atualiza a UI (Header e Cursos)
-                    updateUIforLoginState();
-                    
-                    // Garante que o usuário veja a página principal
-                    showPage(mainPageContent);
-                });
-            }
+        // Ações do Firebase (Login, Cadastro, Logout)
+        // (Só adiciona se o Firebase carregou)
+        if (firebaseReady) { // MODIFICADO: Checa a flag 'firebaseReady'
+            
+            // OUVINTE PRINCIPAL DO FIREBASE (O "CÉREBRO" DO LOGIN)
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // Usuário está logado
+                    // 1. Busca o perfil dele no Firestore
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
 
-            // --- NOVOS Event Handlers para Modal e Assinatura ---
+                    if (userDocSnap.exists()) {
+                        // 2. Perfil encontrado, atualiza a UI
+                        const profile = userDocSnap.data();
+                        updateUIforLogin(user, profile);
+                    } else {
+                        // 3. Perfil não encontrado (pode acontecer em erro de cadastro)
+                        // Trata como se fosse "gratuito"
+                        console.warn("Perfil de usuário não encontrado no Firestore.");
+                        updateUIforLogin(user, { email: user.email, nome: "Usuário", subscriptionStatus: "gratuita" });
+                    }
+                } else {
+                    // Usuário está deslogado
+                    updateUIforLogout();
+                }
+            });
 
-            // 14. Fechar o Modal
-            if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', hideSubscriptionModal);
-            }
-
-            // 15. Link "Ver Planos" do Modal
-            if (modalSubscribeLink) {
-                modalSubscribeLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    hideSubscriptionModal();
-                    showPage(mainPageContent);
-                    // Rola para a seção de preços após a página ser exibida
-                    setTimeout(() => {
-                        document.getElementById('precos')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                });
-            }
-
-            // 16. Lógica de Assinatura (para ambos os botões)
-            // ATUALIZADO: Função agora é async e chama o backend
-            async function handleSubscriptionClick(e) {
+            // Ação: Criar Conta (Cadastro)
+            registerForm?.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const button = e.currentTarget;
-                const priceId = button.dataset.priceId;
-                const originalText = button.innerHTML;
+                const nameInput = registerForm.querySelector('#register-name');
+                const emailInput = registerForm.querySelector('#register-email');
+                const passwordInput = registerForm.querySelector('#register-password');
 
-                // Mostra um "Carregando..."
-                button.innerHTML = 'Processando...';
-                button.disabled = true;
+                if (!nameInput || !emailInput || !passwordInput) return;
+
+                const name = nameInput.value;
+                const email = emailInput.value;
+                const password = passwordInput.value;
 
                 try {
-                    // 1. Chama o seu backend (o 'backend-exemplo.js')
-                    // ⚠️ Lembre-se de rodar seu backend e, se necessário, 
-                    //    mudar 'http://localhost:4242' para a URL real
-                    const response = await fetch('https://synkcamp1.vercel.app/create-checkout-session', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ priceId: priceId }),
+                    // 1. Cria o usuário no Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    // 2. Cria o perfil dele no Firestore
+                    const userDocRef = doc(db, "users", user.uid);
+                    await setDoc(userDocRef, {
+                        nome: name,
+                        email: email,
+                        subscriptionStatus: "gratuita" // Começa como gratuito
                     });
-
-                    if (!response.ok) {
-                        throw new Error('Erro ao se comunicar com o servidor.');
-                    }
-
-                    const session = await response.json();
-
-                    // 2. Redireciona para o Checkout do Stripe
-                    const { error } = await stripe.redirectToCheckout({
-                        sessionId: session.id,
-                    });
-
-                    if (error) {
-                        // Se o Stripe.js falhar, mostra o erro
-                        console.error('Erro ao redirecionar para o Stripe:', error);
-                        alert(error.message); // Substitua por um modal de erro
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-                    }
+                    
+                    // 3. Sucesso! O onAuthStateChanged vai lidar com a UI,
+                    //    mas podemos mandá-lo para a home
+                    showPage(mainPageContent);
 
                 } catch (error) {
-                    // Se o seu backend falhar
-                    console.error('Erro na chamada de assinatura:', error);
-                    alert('Não foi possível iniciar o pagamento. Tente novamente.'); // Substitua por um modal
-                    button.innerHTML = originalText;
-                    button.disabled = false;
+                    console.error("Erro ao cadastrar:", error);
+                    if (registerError) {
+                        registerError.innerText = "Erro: " + error.message;
+                        registerError.classList.remove('hidden');
+                    }
                 }
-            }
+            });
 
-            if (subscribeMonthlyBtn) {
-                subscribeMonthlyBtn.addEventListener('click', handleSubscriptionClick);
-            }
-            if (subscribeAnnualBtn) {
-                subscribeAnnualBtn.addEventListener('click', handleSubscriptionClick);
-            }
+            // Ação: Entrar (Login)
+            loginForm?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const emailInput = loginForm.querySelector('#login-email');
+                const passwordInput = loginForm.querySelector('#login-password');
 
-            // --- CHAMADA INICIAL ---
-            // Define o estado inicial da UI (logge-out) e esconde os cursos de mkt
-            updateUIforLoginState();
+                if (!emailInput || !passwordInput) return;
 
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                try {
+                    // 1. Faz o login no Firebase Auth
+                    await signInWithEmailAndPassword(auth, email, password);
+                    
+                    // 2. Sucesso! O onAuthStateChanged vai cuidar da UI
+                    //    e buscar o perfil no Firestore.
+                    showPage(mainPageContent);
+
+                } catch (error) {
+                    console.error("Erro ao logar:", error);
+                    if (loginError) {
+                        loginError.innerText = "Erro: Email ou senha inválidos.";
+                        loginError.classList.remove('hidden');
+                    }
+                }
+            });
+
+            // Ação: Sair (Logout)
+            logoutBtn?.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await signOut(auth);
+                    // Sucesso! O onAuthStateChanged vai cuidar da UI.
+                } catch (error) {
+                    console.error("Erro ao sair:", error);
+                }
+            });
+
+        } // Fim do if (firebaseReady)
+
+
+        // Ações de Navegação de Página (Básico)
+        logoLink?.addEventListener('click', (e) => { e.preventDefault(); showPage(mainPageContent); });
+        loginBtn?.addEventListener('click', (e) => { e.preventDefault(); showPage(loginPageContent); });
+        signupBtnNav?.addEventListener('click', (e) => { e.preventDefault(); showPage(registerPageContent); }); // Corrigido
+        showRegisterLink?.addEventListener('click', (e) => { e.preventDefault(); showPage(registerPageContent); });
+        showLoginLink?.addEventListener('click', (e) => { e.preventDefault(); showPage(loginPageContent); });
+        backToHomeFromLogin?.addEventListener('click', (e) => { e.preventDefault(); showPage(mainPageContent); });
+        backToHomeFromRegister?.addEventListener('click', (e) => { e.preventDefault(); showPage(mainPageContent); });
+        
+        // Ações da Página de Perfil
+        profileBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Preenche a página de perfil com os dados já carregados
+            updateProfilePage(currentUser, userProfile);
+            showPage(profilePageContent);
         });
+        backToHomeFromProfile?.addEventListener('click', (e) => { e.preventDefault(); showPage(mainPageContent); });
+
+
+        // Ações dos Cursos
+        if (filterContainer) {
+            filterContainer.addEventListener('click', (e) => {
+                const target = e.target.closest('.filter-btn');
+                if (!target) return;
+                
+                filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn) {
+                        btn.classList.remove('bg-brand-orange', 'text-white');
+                        btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                    }
+                });
+                
+                target.classList.add('bg-brand-orange', 'text-white');
+                target.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+                
+                handleFilterClick(target.dataset.filter);
+            });
+        }
+
+        loadMoreBtn?.addEventListener('click', handleLoadMoreClick);
+
+        courseLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const courseCard = link.closest('.course-item');
+                if (!courseCard) return;
+
+                const categoryEl = courseCard.querySelector('.text-sm');
+                const category = categoryEl ? categoryEl.innerText.toUpperCase() : '';
+                const titleEl = courseCard.querySelector('h3');
+                const title = titleEl ? titleEl.innerText : 'Curso';
+                const descriptionEl = courseCard.querySelector('p');
+                const description = descriptionEl ? descriptionEl.innerText : '...';
+                const imageEl = courseCard.querySelector('img');
+                const imageSrc = imageEl ? imageEl.src : '';
+                const detailsHtml = courseCard.querySelectorAll('.space-y-2 .flex');
+                
+                // Verificação de Assinatura
+                const isPremium = premiumCategoriesPT.includes(category);
+                const isSubscribed = userProfile?.subscriptionStatus === 'premium';
+
+                if (isPremium && !isSubscribed) {
+                    e.preventDefault();
+                    showSubscriptionModal();
+                    return; 
+                }
+                
+                // Preenche a página do curso
+                const coursePageCategory = document.getElementById('course-page-category');
+                const coursePageTitle = document.getElementById('course-page-title');
+                const coursePageDescription = document.getElementById('course-page-description');
+                const coursePageImage = document.getElementById('course-page-image');
+
+                if(coursePageCategory) coursePageCategory.innerText = category;
+                if(coursePageTitle) coursePageTitle.innerText = title;
+                if(coursePageDescription) coursePageDescription.innerText = description;
+                if(coursePageImage) coursePageImage.src = imageSrc;
+                
+                const profEl = document.getElementById('course-page-prof');
+                const typeEl = document.getElementById('course-page-type');
+                const durationEl = document.getElementById('course-page-duration');
+
+                if (profEl && detailsHtml[0]) profEl.innerHTML = detailsHtml[0].innerHTML;
+                if (typeEl && detailsHtml[1]) typeEl.innerHTML = detailsHtml[1].innerHTML;
+                if (durationEl && detailsHtml[2]) durationEl.innerHTML = detailsHtml[2].innerHTML;
+                
+                showPage(coursePageContent);
+            });
+        });
+
+        backToCoursesBtn?.addEventListener('click', (e) => { e.preventDefault(); showPage(mainPageContent); });
+
+        startCourseBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentTitleEl = document.getElementById('course-page-title');
+            const currentTitle = currentTitleEl ? currentTitleEl.innerText : '';
+            
+            if (videoCourses.includes(currentTitle)) {
+                if (youtubePlayer) youtubePlayer.src = googleDriveVideoUrl; 
+                const lessonTitleEl = document.getElementById('lesson-title');
+                if (lessonTitleEl) {
+                    lessonTitleEl.innerText = `Aula 1: ${currentTitle}`;
+                }
+                showPage(lessonPlayerContent);
+            } else if (textCourses.includes(currentTitle)) {
+                if (textLessonTitle) {
+                    textLessonTitle.innerText = currentTitle === 'Controle Financeiro para MEI' ? 
+                        '🏛️ Guia Mestre: O Controle Financeiro Definitivo (1/3)' : currentTitle;
+                }
+                if (textLessonBody) {
+                    textLessonBody.innerHTML = currentTitle === 'Controle Financeiro para MEI' ? 
+                        meiGuideContent : placeholderContent;
+                }
+                showPage(textLessonContent);
+            }
+        });
+
+        backToIntroBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (youtubePlayer) youtubePlayer.src = ""; 
+            showPage(coursePageContent);
+        });
+        
+        backToIntroFromTextBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(coursePageContent);
+            if (textLessonBody) textLessonBody.innerHTML = "";
+        });
+
+        // Ações de Assinatura e Modal
+        closeModalBtn?.addEventListener('click', hideSubscriptionModal);
+        modalSubscribeLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideSubscriptionModal();
+            showPage(mainPageContent);
+            setTimeout(() => document.getElementById('precos')?.scrollIntoView({ behavior: 'smooth' }), 100);
+        });
+
+        async function handleSubscriptionClick(e) {
+            e.preventDefault();
+            
+            // 1. Garante que o Firebase está pronto
+            if (!firebaseReady || !currentUser) {
+                alert("Por favor, faça login ou cadastre-se antes de assinar.");
+                showPage(loginPageContent);
+                return;
+            }
+
+            const button = e.currentTarget;
+            if (!button) return;
+            const priceId = button.dataset.priceId;
+            const originalText = button.innerHTML;
+
+            // ⚠️ Verifica se as chaves de exemplo ainda estão lá
+            if (priceId.startsWith('⚠️')) {
+                alert('Erro: Os IDs de preço do Stripe ainda não foram configurados no index.html.');
+                return;
+            }
+            if (stripe._apiKey.startsWith('⚠️')) {
+                 alert('Erro: A Chave Pública do Stripe ainda não foi configurada no index.html.');
+                return;
+            }
+
+            button.innerHTML = 'Processando...';
+            button.disabled = true;
+
+            try {
+                // 2. Chama o backend com o Price ID e o Firebase UID
+                const response = await fetch(`${backendUrl}/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        priceId: priceId,
+                        userId: currentUser.uid // NOVO: Envia o ID do usuário
+                    }),
+                });
+
+                if (!response.ok) throw new Error('Erro ao se comunicar com o servidor.');
+                const session = await response.json();
+
+                // 3. Redireciona para o Checkout do Stripe
+                const { error } = await stripe.redirectToCheckout({
+                    sessionId: session.id,
+                });
+
+                if (error) throw new Error(error.message);
+
+            } catch (error) {
+                console.error('Erro na chamada de assinatura:', error);
+                alert('Não foi possível iniciar o pagamento. Tente novamente.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+        subscriptionButtons.forEach(btn => {
+            if(btn) btn.addEventListener('click', handleSubscriptionClick);
+        });
+
+        // --- CHAMADA INICIAL ---
+        // A UI inicial será definida pelo 'onAuthStateChanged'
+        // (que só é ativado se 'firebaseReady' for true)
+        
     </script>
+
 </body>
 </html>
